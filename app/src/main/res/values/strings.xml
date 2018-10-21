@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Imeplan Movil</string>
+    <string name="title_activity_reporte_ciudadano">Reporte Ciudadano</string>
+    <string name="title_activity_info_reporte">Detalles</string>
+    <string name="title_activity_main">Menú</string>
+    <string name="title_activity_webview">WebView</string>
+    <string name="title_home">Nuevo reporte</string>
+    <string name="title_reports">Mis reportes</string>
+    <string name="title_notifications">Mis borradores</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

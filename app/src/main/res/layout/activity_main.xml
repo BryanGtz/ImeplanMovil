@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mx.com.imeplan.imeplanmovil.MainActivity">
+
+    <br.com.bloder.magic.view.MagicButton
+        android:id="@+id/magic_button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+
+        app:button_icon="@drawable/aa_pot"
+        app:button_icon_height="50dp"
+        app:button_icon_width="50dp"
+
+        app:expandable_area_color="#8aff0011"
+        app:hide_text="              Plan de ordenamiento terrenal"
+
+        app:hide_text_color="#fff"
+        app:hide_text_size="5dp"
+        app:icon_button_color="#ff0011"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:magic_button_size="75dp" />
+
+    <br.com.bloder.magic.view.MagicButton
+        android:id="@+id/magic_button02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+
+        app:button_icon="@drawable/aa_sitios"
+        app:button_icon_height="50dp"
+        app:button_icon_width="50dp"
+
+        app:expandable_area_color="#8a9fd22f"
+        app:icon_button_color="#9fd22f"
+
+        app:hide_text="       Sitios de interes"
+        app:hide_text_color="#fff"
+        app:hide_text_size="5dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magic_button01"
+        app:magic_button_size="75dp" />
+
+    <br.com.bloder.magic.view.MagicButton
+        android:id="@+id/magic_button03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+
+        app:button_icon="@drawable/aa_reporte"
+        app:button_icon_height="50dp"
+        app:button_icon_width="50dp"
+
+        app:icon_button_color="#2f83d2"
+        app:expandable_area_color="#8a2f83d2"
+
+        app:hide_text="      Reporte ciudadano"
+        app:hide_text_color="#fff"
+        app:hide_text_size="5dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magic_button02"
+        app:magic_button_size="75dp" />
+
+    <br.com.bloder.magic.view.MagicButton
+        android:id="@+id/magic_button04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+
+        app:button_icon="@drawable/aa_rutas"
+        app:button_icon_height="50dp"
+        app:button_icon_width="50dp"
+
+        app:expandable_area_color="#8afcd735"
+        app:hide_text="Movilidad"
+
+        app:hide_text_color="#fff"
+        app:hide_text_size="5dp"
+        app:icon_button_color="#fcd735"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magic_button03"
+        app:magic_button_size="75dp" />
+
+    <br.com.bloder.magic.view.MagicButton
+        android:id="@+id/magic_button05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+
+        app:button_icon="@drawable/aa_calculadora"
+        app:button_icon_height="50dp"
+        app:button_icon_width="50dp"
+        app:expandable_area_color="#8b684e18"
+        app:icon_button_color="#684e18"
+
+        app:hide_text="        Calculadora ambiental"
+        app:hide_text_color="#fff"
+        app:hide_text_size="5dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magic_button04"
+        app:layout_constraintVertical_bias="0.0"
+        app:magic_button_size="75dp" />
+
+</android.support.constraint.ConstraintLayout>
