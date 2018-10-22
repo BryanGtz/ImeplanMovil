@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mx.com.imeplan.imeplanmovil.MainActivity">
+    tools:context="mx.com.imeplan.imeplanmovil.MainActivity"
+    android:background="#0064A7">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/imeplanfak"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button01"
@@ -12,24 +23,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
 
+        android:layout_marginRight="8dp"
         app:button_icon="@drawable/aa_pot"
         app:button_icon_height="50dp"
+
         app:button_icon_width="50dp"
+        app:expandable_area_color="#636466"
 
-        app:expandable_area_color="#8aff0011"
-        app:hide_text="              Plan de ordenamiento terrenal"
-
+        app:hide_text="              Plan de Ordenamiento Terrenal"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
-        app:icon_button_color="#ff0011"
 
+        app:icon_button_color="#636466"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:magic_button_size="75dp" />
 
     <br.com.bloder.magic.view.MagicButton
@@ -46,10 +57,10 @@
         app:button_icon_height="50dp"
         app:button_icon_width="50dp"
 
-        app:expandable_area_color="#8a9fd22f"
-        app:icon_button_color="#9fd22f"
+        app:expandable_area_color="#97c93d"
+        app:icon_button_color="#97c93d"
 
-        app:hide_text="       Sitios de interes"
+        app:hide_text="       Sitios de Interés"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
 
@@ -72,10 +83,10 @@
         app:button_icon_height="50dp"
         app:button_icon_width="50dp"
 
-        app:icon_button_color="#2f83d2"
-        app:expandable_area_color="#8a2f83d2"
+        app:icon_button_color="#636466"
+        app:expandable_area_color="#636466"
 
-        app:hide_text="      Reporte ciudadano"
+        app:hide_text="      Reporte Ciudadano"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
 
@@ -98,12 +109,12 @@
         app:button_icon_height="50dp"
         app:button_icon_width="50dp"
 
-        app:expandable_area_color="#8afcd735"
+        app:expandable_area_color="#97c93d"
         app:hide_text="Movilidad"
 
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
-        app:icon_button_color="#fcd735"
+        app:icon_button_color="#97c93d"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,10 +135,10 @@
         app:button_icon="@drawable/aa_calculadora"
         app:button_icon_height="50dp"
         app:button_icon_width="50dp"
-        app:expandable_area_color="#8b684e18"
-        app:icon_button_color="#684e18"
+        app:expandable_area_color="#636466"
+        app:icon_button_color="#636466"
 
-        app:hide_text="        Calculadora ambiental"
+        app:hide_text="        Calculadora Ambiental"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
 
