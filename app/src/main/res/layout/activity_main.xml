@@ -33,7 +33,7 @@
         app:button_icon_width="50dp"
         app:expandable_area_color="#636466"
 
-        app:hide_text="            Plan de Ordenamiento Territorial"
+        app:hide_text="                 Plan de Ordenamiento Territorial"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
 
