@@ -27,7 +27,7 @@ public class WebView_Imeplan extends AppCompatActivity {
         switch (id){
             case 1:
                 title = "Sitios de interés";
-                wb.loadUrl("http://www.google.com");
+                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx/2017/Interes.html");
                 break;
             case 2:
                 title = "Movilidad";
@@ -35,7 +35,7 @@ public class WebView_Imeplan extends AppCompatActivity {
                 break;
             case 3:
                 title = "Calculadora ambiental";
-                wb.loadUrl("http://www.bing.com");
+                wb.loadUrl("http://calculadoraambiental.imeplansurdetamaulipas.gob.mx/");
                 break;
         }
     }
