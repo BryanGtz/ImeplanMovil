@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="60" />
+                                                <entry key="scalingPercent" value="66" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,8 +34,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="43b4e4" />
-                                      <entry key="foregroundImage" value="C:\Users\stenk\Pictures\imeplan\imeplanmovil.png" />
+                                      <entry key="backgroundColor" value="fcfcfe" />
+                                      <entry key="foregroundImage" value="C:\Users\enocalberto\Desktop\thumbnail_IMEPLAN movil.png" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
                                       <entry key="outputName" value="imeplan_icon" />
                                       <entry key="previewDensity" value="HIGH" />

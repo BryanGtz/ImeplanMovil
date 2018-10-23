@@ -1,13 +1,17 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import br.com.bloder.magic.view.MagicButton;
 
@@ -15,6 +19,8 @@ public class MainActivity extends AppCompatActivity{
     MagicButton mbtn01, mbtn02, mbtn03, mbtn04, mbtn05;
     Intent miIntent = null;
     int permissionCheckGPS;
+    ConnectivityManager cm;
+    NetworkInfo ni;
     //String latitud, longitud;
 
     @Override
@@ -36,8 +42,7 @@ public class MainActivity extends AppCompatActivity{
         mbtn01.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                miIntent.putExtra("id",1);
+                miIntent = new Intent(MainActivity.this, PlanDeOrdenamientoActivity.class);
                 startActivity(miIntent);
             }
         });
@@ -45,9 +50,17 @@ public class MainActivity extends AppCompatActivity{
         mbtn02.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                miIntent.putExtra("id",2);
-                startActivity(miIntent);
+                // Revisar conexion a Internet
+                cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                ni = cm.getActiveNetworkInfo();
+
+                if (ni != null && ni.isConnected()) {
+                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                    miIntent.putExtra("id", 1);
+                    startActivity(miIntent);
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
             }
         });
         //Boton Reporte ciudadano
@@ -55,32 +68,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 miIntent = new Intent(MainActivity.this, ReporteCiudadano.class);
-                /*
-                // Obtener la Ubicación
-                LocationManager locationManager = (LocationManager) MainActivity.this.getSystemService(Context.LOCATION_SERVICE);
-
-                // Define a listener that responds to location updates
-                LocationListener locationListener = new LocationListener() {
-                    public void onLocationChanged(Location location) {
-                        latitud = String.valueOf(location.getLatitude());
-                        longitud = String.valueOf(location.getLongitude());
-                    }
-
-                    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-                    public void onProviderEnabled(String provider) {}
-
-                    public void onProviderDisabled(String provider) {}
-                };
-
-                // Register the listener with the Location Manager to receive location updates
-                permissionCheckGPS = ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-                miIntent.putExtra("latitud", latitud);
-                miIntent.putExtra("longitud", longitud);
-                */
                 startActivity(miIntent);
             }
         });
@@ -88,18 +75,34 @@ public class MainActivity extends AppCompatActivity{
         mbtn04.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                miIntent.putExtra("id",3);
-                startActivity(miIntent);
+                // Revisar conexion a Internet
+                cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                ni = cm.getActiveNetworkInfo();
+
+                if (ni != null && ni.isConnected()) {
+                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                    miIntent.putExtra("id", 2);
+                    startActivity(miIntent);
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
             }
         });
         //Boton Calculadora Ambiental
         mbtn05.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                miIntent.putExtra("id",4);
-                startActivity(miIntent);
+                // Revisar conexion a Internet
+                cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                ni = cm.getActiveNetworkInfo();
+
+                if (ni != null && ni.isConnected()) {
+                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                    miIntent.putExtra("id", 3);
+                    startActivity(miIntent);
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
             }
         });
     }

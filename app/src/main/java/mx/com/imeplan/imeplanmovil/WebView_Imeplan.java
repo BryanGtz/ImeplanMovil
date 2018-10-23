@@ -26,18 +26,14 @@ public class WebView_Imeplan extends AppCompatActivity {
     private void ejecutarWebView(int id) {
         switch (id){
             case 1:
-                title = "Plan de ordenamiento";
-                wb.loadUrl("http://www.fb.com");
-                break;
-            case 2:
                 title = "Sitios de interés";
                 wb.loadUrl("http://www.google.com");
                 break;
-            case 3:
+            case 2:
                 title = "Movilidad";
                 wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx");
                 break;
-            case 4:
+            case 3:
                 title = "Calculadora ambiental";
                 wb.loadUrl("http://www.bing.com");
                 break;
