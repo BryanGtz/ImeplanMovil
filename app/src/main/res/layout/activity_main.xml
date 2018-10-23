@@ -11,8 +11,8 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/imeplanfak"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ime_banner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
         app:button_icon_width="50dp"
         app:expandable_area_color="#636466"
 
-        app:hide_text="              Plan de Ordenamiento Terrenal"
+        app:hide_text="            Plan de Ordenamiento Territorial"
         app:hide_text_color="#fff"
         app:hide_text_size="5dp"
 
