@@ -1,11 +1,15 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity{
     int permissionCheckGPS;
     ConnectivityManager cm;
     NetworkInfo ni;
-    //String latitud, longitud;
+    public final int MY_PERMISSION_REQUEST_GPS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,16 @@ public class MainActivity extends AppCompatActivity{
         mbtn03.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miIntent = new Intent(MainActivity.this, ReporteCiudadano.class);
-                startActivity(miIntent);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // Decir porque estamos solicitando permisos
+                    DialogoExplicacion();
+
+                }
+                else {
+                    miIntent = new Intent(MainActivity.this, ReporteCiudadano.class);
+                    startActivity(miIntent);
+                }
             }
         });
         //Boton Movilidad
@@ -109,19 +121,48 @@ public class MainActivity extends AppCompatActivity{
 
     private void solicitarGPS() {
         if (permissionCheckGPS != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                 // Decir porque estamos solicitando permisos
+                DialogoExplicacion();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
+                        MY_PERMISSION_REQUEST_GPS);
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case MY_PERMISSION_REQUEST_GPS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permiso Denegado", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    public void DialogoExplicacion(){
+        String msj = "Descripcion here..";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("¿Por qué necesitamos acceder a tu Ubicación?")
+               .setMessage(msj)
+               .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSION_REQUEST_GPS);
+                    }
+                })
+        .show();
     }
 }
 
