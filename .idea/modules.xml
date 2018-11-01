@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ServicioSocial.iml" filepath="$PROJECT_DIR$/.idea/ServicioSocial.iml" />
       <module fileurl="file://$PROJECT_DIR$/ServicioSocial.iml" filepath="$PROJECT_DIR$/ServicioSocial.iml" />
+      <module fileurl="file://C:\Users\HP\Dropbox\ServicioSocial\.idea\ServicioSocial.iml" filepath="C:\Users\HP\Dropbox\ServicioSocial\.idea\ServicioSocial.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
