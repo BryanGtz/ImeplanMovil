@@ -47,14 +47,6 @@
                     android:layout_marginLeft="15dp"/>
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/campo_ID"
-                android:layout_width="match_parent"
-                android:layout_height="47dp"
-                android:ems="10"
-                android:hint="ID"
-                android:inputType="textPersonName" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

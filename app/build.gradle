@@ -31,4 +31,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.bloder:magic:1.1'
+    implementation files('libs/CircleImageView-master/CircleImageView-master/gradle/wrapper/gradle-wrapper.jar')
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

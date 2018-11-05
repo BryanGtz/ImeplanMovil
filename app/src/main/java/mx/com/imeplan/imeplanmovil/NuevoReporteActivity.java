@@ -82,7 +82,6 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     TextView campoLatitud, campoLongitud;
-    EditText campoID, campoFoto;
     SQLiteOpenHelper conn;
     Button btn;
     String latitud, longitud;
@@ -98,10 +97,8 @@ public class NuevoReporteActivity extends Fragment {
         View frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
         conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 1);
 
-        campoID = (EditText) frag.findViewById(R.id.campo_ID);
         campoLatitud = (TextView) frag.findViewById(R.id.campo_Latitud);
         campoLongitud = (TextView) frag.findViewById(R.id.campo_Longitud);
-        campoFoto = (EditText) frag.findViewById(R.id.campo_Foto);
         btn = (Button) frag.findViewById(R.id.nvo_reporte);
         spinnerC = (Spinner) frag.findViewById(R.id.categoria);
         subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
@@ -229,10 +226,8 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     private void limpiar() {
-        campoID.setText("");
         campoLatitud.setText("");
         campoLongitud.setText("");
-        campoFoto.setText("");
         valor =0 ;
         valorSC = 0;
         spinnerC.setSelection(0);
@@ -243,8 +238,9 @@ public class NuevoReporteActivity extends Fragment {
         SQLiteDatabase db = conn.getWritableDatabase();
 
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
-                " values("+campoID.getText().toString()+","+String.valueOf(valorSC)+"," +
-                "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+campoFoto.getText().toString()+"'," +
+                "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
+                " values("+String.valueOf(valorSC)+"," +
+                "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+"algo.jpg"+"'," +
                 "datetime(),0)";
 
         db.execSQL(insert);

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,14 +16,26 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/info_foto"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="false"
+        android:src="@drawable/no_img"
+        app:civ_border_overlay="false"
+        app:civ_border_width="2dp" />
+    <!--
     <ImageView
         android:id="@+id/info_foto"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@android:drawable/ic_menu_add" />
-
+        android:adjustViewBounds="true"
+        android:background="@drawable/no_img"/>
+    -->
     <TextView
         android:id="@+id/info_id"
         android:layout_width="match_parent"
