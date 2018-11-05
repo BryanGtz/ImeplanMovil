@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity{
                 }
                 else {
                     miIntent = new Intent(MainActivity.this, ReporteCiudadano.class);
+                    miIntent.putExtra("id", 10);
                     startActivity(miIntent);
                 }
             }

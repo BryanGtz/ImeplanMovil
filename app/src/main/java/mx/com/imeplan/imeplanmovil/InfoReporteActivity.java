@@ -4,10 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -22,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
+
 public class InfoReporteActivity extends AppCompatActivity {
     TextView identificador,categoria,subcategoria,fecha,direccion;
     Button estado;
@@ -30,10 +38,17 @@ public class InfoReporteActivity extends AppCompatActivity {
     String cat, sc,fech, dir;
     String [] info = new String[8];
     Bundle infoRep;
+    ConnectivityManager cm;
+    NetworkInfo ni;
+    SQLiteOpenHelper conn;
+    Intent miIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inf_reporte);
+
+        conn = new ConexionSQLiteHelper(this, "bd_imeplanMovil.db", null, 1);
 
         identificador = (TextView) findViewById(R.id.info_id);
         categoria = (TextView) findViewById(R.id.info_cat);
@@ -57,15 +72,33 @@ public class InfoReporteActivity extends AppCompatActivity {
 
         insertarInfo();
 
+        if(edo == 0)
+            estado.setVisibility(View.VISIBLE);
+
         estado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(edo == 0)
-                    Toast.makeText(getApplicationContext(), "Pendiente", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getApplicationContext(), "Atendido", Toast.LENGTH_LONG).show();
+                cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                ni = cm.getActiveNetworkInfo();
+
+                if(ni != null && ni.isConnected()){
+                    updateEstado();
+                    miIntent = new Intent(InfoReporteActivity.this, ReporteCiudadano.class);
+                    miIntent.putExtra("id", "11");
+                    startActivity(miIntent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+
+    private void updateEstado() {
+        SQLiteDatabase db = conn.getWritableDatabase();
+
+        String update = "update "+Utilidades.TABLA_REPORTE+" set "+Utilidades.R_CAMPO_ESTADO+" = 1 where "+Utilidades.R_CAMPO_ID+" = "+ident;
+        db.execSQL(update);
+        db.close();
     }
 
     private void insertarInfo() {

@@ -16,12 +16,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReporteCiudadano extends AppCompatActivity implements NuevoReporteActivity.OnFragmentInteractionListener, MisReportesActivity.OnFragmentInteractionListener{
+public class ReporteCiudadano extends AppCompatActivity implements
+        NuevoReporteActivity.OnFragmentInteractionListener,
+        MisReportesActivity.OnFragmentInteractionListener,
+        MisBorradoresActivity.OnFragmentInteractionListener{
+
     FragmentTransaction ft;
     final NuevoReporteActivity nuevo_reporte = new NuevoReporteActivity();
     final MisReportesActivity mis_reportes = new MisReportesActivity();
+    final MisBorradoresActivity mis_borradores = new MisBorradoresActivity();
     int permissionCheckCAMERA;
     public final int MY_PERMISSION_REQUEST_CAMERA = 1;
+    int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +41,15 @@ public class ReporteCiudadano extends AppCompatActivity implements NuevoReporteA
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        type = getIntent().getExtras().getInt("id");
+
         ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor, nuevo_reporte);
+        if(type == 10)
+            ft.replace(R.id.contenedor, nuevo_reporte);
+        else{
+            ft.replace(R.id.contenedor, mis_reportes);
+            Toast.makeText(getApplicationContext(), "Correo Enviado", Toast.LENGTH_LONG).show();
+        }
         ft.commit();
     }
 
@@ -106,6 +119,9 @@ public class ReporteCiudadano extends AppCompatActivity implements NuevoReporteA
                     ft.commit();
                     return true;
                 case R.id.navigation_notifications:
+                    ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.contenedor, mis_borradores);
+                    ft.commit();
                     return true;
             }
             return false;

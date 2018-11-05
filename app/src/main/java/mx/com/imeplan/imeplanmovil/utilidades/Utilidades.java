@@ -32,7 +32,7 @@ public class Utilidades {
 
     public static final String CREAR_TABLA_REPORTE =
             "create table "+TABLA_REPORTE+" ("+R_CAMPO_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+R_CAMPO_SUBCATEGORIA+" INTEGER, "+R_CAMPO_LATITUD+" TEXT, " +
-                    R_CAMPO_LONGITUD+" TEXT, "+R_CAMPO_FOTO+" TEXT, "+R_CAMPO_FECHA+" DATE, "+R_CAMPO_ESTADO+" BOOLEAN, " +
+                    R_CAMPO_LONGITUD+" TEXT, "+R_CAMPO_FOTO+" TEXT, "+R_CAMPO_FECHA+" DATE, "+R_CAMPO_ESTADO+" INTEGER, " +
                     "FOREIGN KEY("+R_CAMPO_SUBCATEGORIA+") REFERENCES "+TABLA_SUBCATEGORIA+"("+SC_CAMPO_ID+"))";
 
     // Llenar tabla Categorias
@@ -66,14 +66,21 @@ public class Utilidades {
                     "(15,7,'Anuncios'),"+
                     "(16,7,'Banqueta');";
 
-    // Ver último registro
-    public static final String ULTIMO_REGISTRO= "select max("+R_CAMPO_ID+") from "+TABLA_REPORTE;
-
     // Ver reporte
     public static final String VER_REPORTE = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
             +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
             +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
             +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
-            " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+";";
+            " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
+            " where "+R_CAMPO_ESTADO+" = 1;";
+
+    // Ver borrador
+    public static final String VER_BORRADOR = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
+            +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
+            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
+            +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
+            " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
+            " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
+            " where "+R_CAMPO_ESTADO+" = 0;";
 }

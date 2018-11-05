@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,8 +38,6 @@ import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
  * create an instance of this fragment.
  */
 public class NuevoReporteActivity extends Fragment {
-
-    TextView tv;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,7 +88,9 @@ public class NuevoReporteActivity extends Fragment {
     int valor, valorSC;
     int permissionCheckGPS;
     Spinner spinnerC, subCategoria;
-
+    ConnectivityManager cm;
+    NetworkInfo ni;
+    int isInternet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -211,12 +213,13 @@ public class NuevoReporteActivity extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        //latitud = getArguments().getString("latitud");
-        //longitud = getArguments().getString("longitud");
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Revisar conexion a Internet
+                cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                ni = cm.getActiveNetworkInfo();
+                isInternet = (ni != null && ni.isConnected()) ? 1 : 0;
                 registrarReporteSQL();
                 limpiar();
             }
@@ -236,12 +239,15 @@ public class NuevoReporteActivity extends Fragment {
 
     private void registrarReporteSQL() {
         SQLiteDatabase db = conn.getWritableDatabase();
-
+        String msj;
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
                 "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
                 "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+"algo.jpg"+"'," +
-                "datetime(),0)";
+                "datetime(),"+isInternet+")";
+
+        msj = (isInternet == 1) ? "Enviando correo..." : "A mis borradores";
+        Toast.makeText(getContext(), msj, Toast.LENGTH_LONG).show();
 
         db.execSQL(insert);
         db.close();
