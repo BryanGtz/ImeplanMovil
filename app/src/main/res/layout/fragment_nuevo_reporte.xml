@@ -15,16 +15,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView2"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Nuevo Reporte"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="Nuevo Reporte"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,66 +49,74 @@
                     android:id="@+id/imageView"
                     android:layout_width="129dp"
                     android:layout_height="90dp"
-                    android:background="#b3abab"
-                    android:layout_marginLeft="15dp"/>
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:background="#b3abab" />
+
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/campo_ID"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="47dp"
-                android:ems="10"
-                android:hint="ID"
-                android:inputType="textPersonName" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Categoría"
-                android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/campo_ID"
+                    android:layout_width="match_parent"
+                    android:layout_height="47dp"
+                    android:ems="10"
+                    android:hint="ID"
+                    android:inputType="textPersonName" />
 
-            <Spinner
-                android:id="@+id/categoria"
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                tools:layout_editor_absoluteX="0dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Subcategoria"
-                android:textSize="18sp" />
+                <Spinner
+                    android:id="@+id/categoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    tools:layout_editor_absoluteX="0dp" />
 
-            <Spinner
-                android:id="@+id/campo_SubCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Subcategoria"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/campo_Latitud"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="Latitud"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <Spinner
+                    android:id="@+id/campo_SubCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout_editor_absoluteX="0dp" />
 
-            <TextView
-                android:id="@+id/campo_Longitud"
-                android:layout_width="match_parent"
-                android:layout_height="29dp"
-                android:ems="10"
-                android:text="Longitud"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/campo_Latitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:text="Latitud"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/nvo_reporte"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registrar Reporte" />
+                <TextView
+                    android:id="@+id/campo_Longitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:ems="10"
+                    android:text="Longitud"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/nvo_reporte"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Registrar Reporte" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
