@@ -48,6 +48,7 @@ public class ReporteCiudadano extends AppCompatActivity implements
             ft.replace(R.id.contenedor, nuevo_reporte);
         else{
             ft.replace(R.id.contenedor, mis_reportes);
+            navigation.setSelectedItemId(R.id.navigation_reports);
             Toast.makeText(getApplicationContext(), "Correo Enviado", Toast.LENGTH_LONG).show();
         }
         ft.commit();

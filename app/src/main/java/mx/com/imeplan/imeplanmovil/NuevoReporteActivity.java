@@ -2,6 +2,7 @@ package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.net.Uri;
 
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.xml.transform.sax.SAXResult;
 
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
@@ -251,6 +263,65 @@ public class NuevoReporteActivity extends Fragment {
 
         db.execSQL(insert);
         db.close();
+
+        //Enviar correo
+        sendEmail();
+    }
+
+    protected void sendEmail() {
+        /*try {
+            String user = "bryangtz317@gmail.com";
+            Mail sender = new Mail(user);
+            sender.sendMail("This is Subject",
+                    "This is Body",
+                    user,
+                    user);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }*/
+        String host="smtp.gmail.com";
+        final String from="bryan.gtz.317@gmail.com";//change accordingly
+        final String password="br31y07an97";//change accordingly
+
+        String to="bryan.gtz.317@gmail.com";//change accordingly
+
+        String sub = "Este es el asunto";
+        String msg = "";
+
+        //Get the session object
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+        //get Session
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(from,password);
+                    }
+                });
+        //compose message
+        try {
+            final MimeMessage message = new MimeMessage(session);
+            message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
+            message.setSubject(sub);
+            message.setText(msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
+        } catch (MessagingException e) {Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();}
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

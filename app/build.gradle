@@ -33,4 +33,7 @@ dependencies {
     implementation 'com.github.bloder:magic:1.1'
     implementation files('libs/CircleImageView-master/CircleImageView-master/gradle/wrapper/gradle-wrapper.jar')
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
 }
