@@ -83,4 +83,13 @@ public class Utilidades {
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
             " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
             " where "+R_CAMPO_ESTADO+" = 0;";
+
+    // Ver ultimo reporte
+    public static final String VER_ULTIMO_REPORTE = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
+            +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
+            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
+            +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
+            " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
+            " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
+            " where Reporte."+R_CAMPO_ID+" = (select MAX(Reporte.id) from Reporte);";
 }

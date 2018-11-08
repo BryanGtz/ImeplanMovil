@@ -2,7 +2,7 @@ package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
@@ -14,18 +14,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.net.Uri;
 
 import java.util.Properties;
 
@@ -251,24 +248,37 @@ public class NuevoReporteActivity extends Fragment {
 
     private void registrarReporteSQL() {
         SQLiteDatabase db = conn.getWritableDatabase();
-        String msj;
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
                 "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
                 "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+"algo.jpg"+"'," +
                 "datetime(),"+isInternet+")";
 
-        msj = (isInternet == 1) ? "Enviando correo..." : "A mis borradores";
-        Toast.makeText(getContext(), msj, Toast.LENGTH_LONG).show();
-
         db.execSQL(insert);
         db.close();
 
-        //Enviar correo
-        sendEmail();
+        if (isInternet == 1)
+            sendEmail(getReporte());
+        else
+            Toast.makeText(getContext(), "Reporte enviado a mis borradores", Toast.LENGTH_LONG).show();
     }
 
-    protected void sendEmail() {
+    private String[] getReporte() {
+        String [] data = new String[5];
+        SQLiteDatabase db = conn.getReadableDatabase();
+        Cursor c = db.rawQuery(Utilidades.VER_ULTIMO_REPORTE, null);
+        while(c.moveToNext()){
+            data[0] = c.getString(1);   // Subcategoria
+            data[1] = c.getString(2);   // Categoria
+            data[2] = c.getString(3);   // Latitud
+            data[3] = c.getString(4);   // Longitud
+            data[4] = c.getString(6);   // Fecha
+        }
+
+        return data;
+    }
+
+    protected void sendEmail(String [] datos) {
         /*try {
             String user = "bryangtz317@gmail.com";
             Mail sender = new Mail(user);
@@ -285,8 +295,11 @@ public class NuevoReporteActivity extends Fragment {
 
         String to="bryan.gtz.317@gmail.com";//change accordingly
 
-        String sub = "Este es el asunto";
-        String msg = "Reporte de ciudadano";
+        String sub = "Reporte dirigido hacia "+datos[1];
+        String msg = "Subcategoría: "+datos[0]+"\n" +
+                     "Latitud: "+datos[2]+"\n"+
+                     "Longitud: "+datos[3]+"\n"+
+                     "Fecha: "+datos[4];
 
         //Get the session object
         Properties props = new Properties();
