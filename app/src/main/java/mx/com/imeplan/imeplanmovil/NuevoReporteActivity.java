@@ -286,7 +286,7 @@ public class NuevoReporteActivity extends Fragment {
         String to="bryan.gtz.317@gmail.com";//change accordingly
 
         String sub = "Este es el asunto";
-        String msg = "";
+        String msg = "Reporte de ciudadano";
 
         //Get the session object
         Properties props = new Properties();
