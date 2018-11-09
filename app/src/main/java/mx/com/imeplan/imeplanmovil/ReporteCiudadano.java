@@ -44,14 +44,15 @@ public class ReporteCiudadano extends AppCompatActivity implements
         type = getIntent().getExtras().getInt("id");
 
         ft = getSupportFragmentManager().beginTransaction();
-        if(type == 10)
+        if(type == 10) {
             ft.replace(R.id.contenedor, nuevo_reporte);
-        else{
+            ft.commit();
+        } else{
             ft.replace(R.id.contenedor, mis_reportes);
-            navigation.setSelectedItemId(R.id.navigation_reports);
-            Toast.makeText(getApplicationContext(), "Correo Enviado", Toast.LENGTH_LONG).show();
+            ft.commit();
+            navigation.getMenu().getItem(1).setChecked(true);
+            Toast.makeText(getApplicationContext(), "Correo enviado exitosamente", Toast.LENGTH_LONG).show();
         }
-        ft.commit();
     }
 
     @Override

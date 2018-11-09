@@ -33,8 +33,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.xml.transform.sax.SAXResult;
-
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 
@@ -252,7 +250,7 @@ public class NuevoReporteActivity extends Fragment {
                 "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
                 "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+"algo.jpg"+"'," +
-                "datetime(),"+isInternet+")";
+                "datetime(current_timestamp, 'localtime'),"+isInternet+")";
 
         db.execSQL(insert);
         db.close();

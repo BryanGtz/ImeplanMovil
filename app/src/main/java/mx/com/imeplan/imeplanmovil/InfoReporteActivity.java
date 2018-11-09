@@ -28,6 +28,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 public class InfoReporteActivity extends AppCompatActivity {
@@ -81,7 +91,7 @@ public class InfoReporteActivity extends AppCompatActivity {
                 cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 ni = cm.getActiveNetworkInfo();
 
-                if(ni != null && ni.isConnected()){
+                if(ni != null && ni.isConnected() && sendEmail(info)){
                     updateEstado();
                     miIntent = new Intent(InfoReporteActivity.this, ReporteCiudadano.class);
                     miIntent.putExtra("id", "11");
@@ -99,6 +109,57 @@ public class InfoReporteActivity extends AppCompatActivity {
         String update = "update "+Utilidades.TABLA_REPORTE+" set "+Utilidades.R_CAMPO_ESTADO+" = 1 where "+Utilidades.R_CAMPO_ID+" = "+ident;
         db.execSQL(update);
         db.close();
+    }
+
+    protected boolean sendEmail(String [] datos) {
+        String host="smtp.gmail.com";
+        final String from="bryan.gtz.317@gmail.com";//change accordingly
+        final String password="br31y07an97";//change accordingly
+
+        String to="shanock.charras@gmail.com";//change accordingly
+
+        String sub = "Reporte dirigido hacia "+datos[1];
+        String msg = "Subcategoría: "+datos[2]+"\n" +
+                "Latitud: "+datos[3]+"\n"+
+                "Longitud: "+datos[4]+"\n"+
+                "Fecha: "+datos[6];
+
+        //Get the session object
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+        //get Session
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(from,password);
+                    }
+                });
+        //compose message
+        try {
+            final MimeMessage message = new MimeMessage(session);
+            message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
+            message.setSubject(sub);
+            message.setText(msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(message);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            return true;
+        } catch (MessagingException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
 
     private void insertarInfo() {

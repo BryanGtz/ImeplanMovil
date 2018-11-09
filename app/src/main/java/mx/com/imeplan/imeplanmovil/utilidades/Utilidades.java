@@ -92,4 +92,6 @@ public class Utilidades {
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
             " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
             " where Reporte."+R_CAMPO_ID+" = (select MAX(Reporte.id) from Reporte);";
+
+    //insert into hola values (1,"Enoc",datetime(current_timestamp, 'localtime'));
 }
