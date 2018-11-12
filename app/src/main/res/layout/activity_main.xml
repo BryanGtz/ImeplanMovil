@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="mx.com.imeplan.imeplanmovil.MainActivity"
-    android:background="#0064A7">
+    android:background="#0064A7"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -16,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_weight="1"/>
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button01"
@@ -34,15 +37,16 @@
         app:button_icon_width="50dp"
         app:expandable_area_color="#fff"
 
-        app:hide_text="                 Plan de Ordenamiento Territorial"
+        app:hide_text="            Plan de Ordenamiento Territorial"
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="7dp"
 
         app:icon_button_color="#43B4E4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:magic_button_size="75dp" />
+        app:magic_button_size="75dp"
+        android:layout_weight="1"/>
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button02"
@@ -63,12 +67,13 @@
 
         app:hide_text="       Sitios de Interés"
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="7dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/magic_button01"
-        app:magic_button_size="75dp" />
+        app:magic_button_size="75dp"
+        android:layout_weight="1"/>
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button03"
@@ -89,12 +94,13 @@
 
         app:hide_text="      Reporte Ciudadano"
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="7dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/magic_button02"
-        app:magic_button_size="75dp" />
+        app:magic_button_size="75dp"
+        android:layout_weight="1"/>
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button04"
@@ -114,13 +120,14 @@
         app:hide_text="Movilidad"
 
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="7dp"
         app:icon_button_color="#97c93d"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/magic_button03"
-        app:magic_button_size="75dp" />
+        app:magic_button_size="75dp"
+        android:layout_weight="1"/>
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button05"
@@ -141,13 +148,14 @@
 
         app:hide_text="        Calculadora Ambiental"
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="7dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/magic_button04"
         app:layout_constraintVertical_bias="0.0"
-        app:magic_button_size="75dp" />
+        app:magic_button_size="75dp"
+        android:layout_weight="1"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
