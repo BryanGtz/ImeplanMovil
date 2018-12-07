@@ -39,11 +39,11 @@ public class Utilidades {
     public static final String INSERTAR_CATEGORIAS =
             "insert into "+TABLA_CATEGORIA+" ("+C_CAMPO_ID+","+C_CAMPO_CATEGORIA+") values" +
                     "(1,'COMAPA'),"+
-                    "(2,'SERVICIOS PUBLICOS'),"+
-                    "(3,'CUADRILLA ECOLOGICA'),"+
-                    "(4,'OBRAS PUBLICAS'),"+
-                    "(5,'VIALIDAD'),"+
-                    "(6,'OTROS');";
+                    "(2,'Servicios públicos'),"+
+                    "(3,'Cuadrilla ecológica'),"+
+                    "(4,'Obras públicas'),"+
+                    "(5,'Vialidad'),"+
+                    "(6,'Otros');";
 
     // Llenar tabla SubCategorias
     public static final String INSERTAR_SUBCATEGORIAS =
