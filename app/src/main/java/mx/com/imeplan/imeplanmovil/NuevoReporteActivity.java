@@ -33,6 +33,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.xml.transform.sax.SAXResult;
+
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 
@@ -98,12 +100,12 @@ public class NuevoReporteActivity extends Fragment {
     ConnectivityManager cm;
     NetworkInfo ni;
     int isInternet;
-
+    View frag;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
+        frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
         conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 1);
 
         campoLatitud = (TextView) frag.findViewById(R.id.campo_Latitud);
@@ -112,46 +114,54 @@ public class NuevoReporteActivity extends Fragment {
         spinnerC = (Spinner) frag.findViewById(R.id.categoria);
         subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
 
-        String[] categorias = {"Seleccione","Comapa","CFE","Recoleccion de basura","Cuadrilla ecologica","Pavimentacion","Vialidad","Otros"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categorias);
-        spinnerC.setAdapter(adapter);
+        SQLiteDatabase db = conn.getReadableDatabase();
+        Cursor cursor;
+        String[]categorias;
+        try {
+            cursor = db.rawQuery("select " + Utilidades.C_CAMPO_CATEGORIA +
+                    " from " + Utilidades.TABLA_CATEGORIA, null);
+            categorias = new String[cursor.getCount()+1];
+            categorias[0]="--Seleccione una categoria---";
+            int i = 0;
+            while(cursor.moveToNext()&&i<cursor.getCount()){
+                categorias[i+1] = cursor.getString(0);
+                i++;
+            }
+            db.close();
+            cursor.close();
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categorias);
+            spinnerC.setAdapter(adapter);
+        }catch (Exception e){
+            Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT);
+        }
 
         // Establecer Spinner
         spinnerC.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String[] subcategorias = {""};
-                valor = position;
-                switch (position) {
-                    case 0:
-                        subcategorias = new String[]{""};
-                        break;
-                    case 1:
-                        subcategorias = new String[]{"Fugas", "Corte de agua"};
-                        break;
-                    case 2:
-                        subcategorias = new String[]{"Cableado", "Corte de luz", "Poste caído"};
-                        break;
-                    case 3:
-                        subcategorias = new String[]{"Recoleccion de basura"};
-                        break;
-                    case 4:
-                        subcategorias = new String[]{"Limpieza","Árbol caído"};
-                        break;
-                    case 5:
-                        subcategorias = new String[] {"Bache", "Pavimentación"};
-                        break;
-                    case 6:
-                        subcategorias = new String[]{"Vialidad peligrosa", "Semáforo", "Tope", "Accidente"};
-                        break;
-                    case 7:
-                        subcategorias = new String[]{"Anuncio", "Banqueta"};
-                        break;
-                    default:
-                        subcategorias = new String[]{""};
-                        break;
+                String[] subcategorias;
+                if(position==0){
+                    subcategorias = new String[]{"--Seleccione una categoria--"};
                 }
+                else{
+                    SQLiteDatabase db = conn.getReadableDatabase();
+                    Cursor cursor = db.rawQuery("select "+Utilidades.SC_CAMPO_SUBCATEGORIA+
+                            " from "+Utilidades.TABLA_SUBCATEGORIA +
+                            " where "+Utilidades.SC_CAMPO_CATEGORIA+" = "+ position,null);
+                    subcategorias = new String[cursor.getCount()];
+                    int i = 0;
+                    if(cursor.moveToFirst()){
+                        do{
+                            subcategorias[i]=cursor.getString(0);
+                            i++;
+                        }
+                        while(cursor.moveToNext());
+                    }
+                    db.close();
+                    cursor.close();
+                }
+                //subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
                 subCategoria.setAdapter(adapter);
             }
@@ -162,32 +172,31 @@ public class NuevoReporteActivity extends Fragment {
         subCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                switch (valor){
-                    case 1:
-                        valorSC = i;
-                        break;
-                    case 2:
-                        valorSC = 2 + i;
-                        break;
-                    case 3:
-                        valorSC = 5 + i;
-                        break;
-                    case 4:
-                        valorSC = 6 + i;
-                        break;
-                    case 5:
-                        valorSC = 8 + i;
-                        break;
-                    case 6:
-                        valorSC = 10 + i;
-                        break;
-                    case 7:
-                        valorSC = 14 + i;
-                        break;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String subnombre = subCategoria.getSelectedItem().toString();
+                if(!subnombre.equals("--Seleccione una categoria--")){
+                    SQLiteDatabase db = conn.getReadableDatabase();
+                    int[] subcategorias;
+                    Cursor cursor = db.rawQuery(
+                            "select "+Utilidades.SC_CAMPO_ID+
+                            " from "+Utilidades.TABLA_SUBCATEGORIA +
+                            " where "+Utilidades.SC_CAMPO_SUBCATEGORIA+" like '"+subnombre+"'",null);
+                    int num = cursor.getCount();
+                    subcategorias = new int[num];
+                    int i = 0;
+                    if(cursor.moveToFirst()){
+                        do{
+                            subcategorias[i]=cursor.getInt(0);
+                            i++;
+                        }
+                        while(cursor.moveToNext());
+                    }
+                    db.close();
+                    cursor.close();
+                    valorSC = subcategorias[0];
+                    Toast.makeText(adapterView.getContext(),String.valueOf(valorSC),Toast.LENGTH_LONG).show();
                 }
-                valorSC+= 1;
+
             }
 
             @Override
@@ -295,9 +304,9 @@ public class NuevoReporteActivity extends Fragment {
 
         String sub = "Reporte dirigido hacia "+datos[1];
         String msg = "Subcategoría: "+datos[0]+"\n" +
-                     "Latitud: "+datos[2]+"\n"+
-                     "Longitud: "+datos[3]+"\n"+
-                     "Fecha: "+datos[4];
+                "Latitud: "+datos[2]+"\n"+
+                "Longitud: "+datos[3]+"\n"+
+                "Fecha: "+datos[4];
 
         //Get the session object
         Properties props = new Properties();
@@ -331,7 +340,9 @@ public class NuevoReporteActivity extends Fragment {
                 }
             }).start();
             Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
-        } catch (MessagingException e) {Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();}
+        } catch (MessagingException e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
     }
 
