@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,6 +26,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -91,9 +96,10 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     TextView campoLatitud, campoLongitud;
+    String [] direccion=new String[2];
     SQLiteOpenHelper conn;
     Button btn;
-    String latitud, longitud;
+    double latitud, longitud;
     int valor, valorSC;
     int permissionCheckGPS;
     Spinner spinnerC, subCategoria;
@@ -101,6 +107,7 @@ public class NuevoReporteActivity extends Fragment {
     NetworkInfo ni;
     int isInternet;
     View frag;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -164,6 +171,7 @@ public class NuevoReporteActivity extends Fragment {
                 }
                 //subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
+                adapter.setDropDownViewResource(R.layout.spinner_item);
                 subCategoria.setAdapter(adapter);
             }
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -211,11 +219,30 @@ public class NuevoReporteActivity extends Fragment {
 
         // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
+            class MyRunnable implements Runnable {
+                Location l;
+                public MyRunnable(Location location){
+                    l = location;
+                }
+                @Override
+                public void run() {
+                    latitud =l.getLatitude();
+                    longitud =l.getLongitude();
+                    try {
+                        direccion = adress(latitud, longitud, getActivity().getApplicationContext());
+                    }
+                    catch(Exception e){
+
+                    }
+                    campoLatitud.setText("Municipio: "+direccion[1]);
+                    campoLongitud.setText("Direccion: "+direccion[0]);
+                }
+            }
             public void onLocationChanged(Location location) {
-                latitud = String.valueOf(location.getLatitude());
-                longitud = String.valueOf(location.getLongitude());
-                campoLatitud.setText(latitud);
-                campoLongitud.setText(longitud);
+                Thread t = new Thread(new MyRunnable(location));
+                t.run();
+                t.interrupt();
+
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -243,6 +270,18 @@ public class NuevoReporteActivity extends Fragment {
         });
 
         return frag;
+    }
+
+    private String[] adress(double lat, double log, Context c) throws IOException {
+        String [] r = new String [2];
+        Geocoder geocoder;
+        List<Address> address;
+        geocoder = new Geocoder(c, Locale.getDefault());
+        address = geocoder.getFromLocation(lat,log,1);
+        r[0] = address.get(0).getAddressLine(0);
+        r[1] = address.get(0).getLocality();
+
+        return r;
     }
 
     private void limpiar() {
