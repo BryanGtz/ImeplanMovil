@@ -13,8 +13,11 @@
     </style>
     <style name="spinner_style">
         <item name="android:background">@drawable/gradient_spinner</item>
-        <item name="android:popupBackground">#DFFFFFFF</item>
-        <item name="android:textSize">24dp</item>
+        <item name="android:popupBackground">#FFFFFF</item>
+    </style>
+
+    <style name="spinner_item" parent="AppTheme.NoActionBar">
+        <item name="android:layout_height">35dp</item>
     </style>
 
 </resources>

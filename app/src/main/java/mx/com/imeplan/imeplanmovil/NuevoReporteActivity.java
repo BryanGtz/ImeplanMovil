@@ -130,6 +130,7 @@ public class NuevoReporteActivity extends Fragment {
             db.close();
             cursor.close();
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categorias);
+            adapter.setDropDownViewResource(R.layout.spinner_item);
             spinnerC.setAdapter(adapter);
         }catch (Exception e){
             Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT);
@@ -194,7 +195,7 @@ public class NuevoReporteActivity extends Fragment {
                     db.close();
                     cursor.close();
                     valorSC = subcategorias[0];
-                    Toast.makeText(adapterView.getContext(),String.valueOf(valorSC),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(adapterView.getContext(),String.valueOf(valorSC),Toast.LENGTH_LONG).show();
                 }
 
             }

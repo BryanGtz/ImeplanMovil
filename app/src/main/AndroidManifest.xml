@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mx.com.imeplan.imeplanmovil">
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.location.gps"/>
-    <uses-feature android:name="android.hardware.camera"
-                  android:required="true"></uses-feature>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -35,15 +38,13 @@
         </activity>
         <activity
             android:name=".WebView_Imeplan"
-            android:label="@string/title_activity_webview">
-        </activity>
+            android:label="@string/title_activity_webview" />
         <activity
             android:name=".InfoReporteActivity"
-            android:label="@string/title_activity_info_reporte">
-        </activity>
+            android:label="@string/title_activity_info_reporte" />
         <activity
             android:name=".PlanDeOrdenamientoActivity"
-            android:label="POT">
-        </activity>
+            android:label="POT" />
     </application>
+
 </manifest>
