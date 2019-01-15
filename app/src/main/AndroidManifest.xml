@@ -45,6 +45,7 @@
         <activity
             android:name=".PlanDeOrdenamientoActivity"
             android:label="POT" />
+        <activity android:name=".OnBoarding"></activity>
     </application>
 
 </manifest>
