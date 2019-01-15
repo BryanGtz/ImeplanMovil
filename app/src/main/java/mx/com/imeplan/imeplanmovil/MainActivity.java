@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,12 +27,19 @@ public class MainActivity extends AppCompatActivity{
     ConnectivityManager cm;
     NetworkInfo ni;
     public final int MY_PERMISSION_REQUEST_GPS = 1;
+    private  String PREFS_KEY = "mispreferencias";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Mostrar OnBoarding activity 1 vez
+        boolean muestra= getValuePreference(getApplicationContext());
+        if(muestra){
+            Intent intent = new Intent(MainActivity.this, OnBoarding.class);
+            startActivity(intent);
+            saveValuePreference(getApplicationContext(), false);
+        }
         // Solicitar Permisos GPS
         permissionCheckGPS = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         solicitarGPS();
@@ -164,6 +172,18 @@ public class MainActivity extends AppCompatActivity{
                     }
                 })
         .show();
+    }
+
+    public void saveValuePreference(Context context, Boolean mostrar){
+        SharedPreferences settings= context.getSharedPreferences(PREFS_KEY, MODE_PRIVATE);
+        SharedPreferences.Editor editor;
+        editor= settings.edit();
+        editor.putBoolean("license", mostrar);
+        editor.commit();
+    }
+    public boolean getValuePreference(Context context){
+        SharedPreferences sp= context.getSharedPreferences(PREFS_KEY,MODE_PRIVATE);
+        return sp.getBoolean("license",true);
     }
 }
 
