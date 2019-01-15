@@ -1,9 +1,12 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
@@ -13,6 +16,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,8 @@ public class ReporteCiudadano extends AppCompatActivity implements
     int permissionCheckCAMERA;
     public final int MY_PERMISSION_REQUEST_CAMERA = 1;
     int type;
+    Bitmap bmp;
+    ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class ReporteCiudadano extends AppCompatActivity implements
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         type = getIntent().getExtras().getInt("id");
+        img = (ImageView)findViewById(R.id.imageView);
 
         ft = getSupportFragmentManager().beginTransaction();
         if(type == 10) {
@@ -129,6 +136,9 @@ public class ReporteCiudadano extends AppCompatActivity implements
             return false;
         }
     };
+
+
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

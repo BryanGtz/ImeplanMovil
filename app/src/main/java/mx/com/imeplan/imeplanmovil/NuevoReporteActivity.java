@@ -1,10 +1,13 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,19 +17,26 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -98,7 +108,7 @@ public class NuevoReporteActivity extends Fragment {
     TextView campoLatitud, campoLongitud;
     String [] direccion=new String[2];
     SQLiteOpenHelper conn;
-    Button btn;
+    Button enviar, camara;
     double latitud, longitud;
     int valor, valorSC;
     int permissionCheckGPS;
@@ -107,6 +117,9 @@ public class NuevoReporteActivity extends Fragment {
     NetworkInfo ni;
     int isInternet;
     View frag;
+    Bitmap bmp;
+    ImageView img;
+    String mCurrentPhotoPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,7 +130,10 @@ public class NuevoReporteActivity extends Fragment {
 
         campoLatitud = (TextView) frag.findViewById(R.id.campo_Latitud);
         campoLongitud = (TextView) frag.findViewById(R.id.campo_Longitud);
-        btn = (Button) frag.findViewById(R.id.nvo_reporte);
+        enviar = (Button) frag.findViewById(R.id.nvo_reporte);
+        camara = (Button) frag.findViewById(R.id.camera);
+        img = (ImageView)frag.findViewById(R.id.imageView);
+
         spinnerC = (Spinner) frag.findViewById(R.id.categoria);
         subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
 
@@ -136,7 +152,7 @@ public class NuevoReporteActivity extends Fragment {
             }
             db.close();
             cursor.close();
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categorias);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categorias);
             adapter.setDropDownViewResource(R.layout.spinner_item);
             spinnerC.setAdapter(adapter);
         }catch (Exception e){
@@ -170,7 +186,7 @@ public class NuevoReporteActivity extends Fragment {
                     cursor.close();
                 }
                 //subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
                 adapter.setDropDownViewResource(R.layout.spinner_item);
                 subCategoria.setAdapter(adapter);
             }
@@ -257,7 +273,7 @@ public class NuevoReporteActivity extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Revisar conexion a Internet
@@ -269,7 +285,40 @@ public class NuevoReporteActivity extends Fragment {
             }
         });
 
+        camara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Abrir la camara
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                }catch (Exception e){
+
+                }
+                if(photoFile != null){
+                    Uri photoURI = FileProvider.getUriForFile(
+                            NuevoReporteActivity.this.getActivity().getBaseContext(),
+                            "mx.com.imeplan.imeplanmovil.android.fileprovider",photoFile
+                    );
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                    startActivityForResult(takePictureIntent, 0);
+                }
+
+            }
+
+        });
         return frag;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK){
+            Bundle ext = data.getExtras();
+            bmp = (Bitmap)ext.get("data");
+            img.setImageBitmap(bmp);
+        }
     }
 
     private String[] adress(double lat, double log, Context c) throws IOException {
@@ -326,17 +375,22 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     protected void sendEmail(String [] datos) {
-        /*try {
-            String user = "bryangtz317@gmail.com";
-            Mail sender = new Mail(user);
-            sender.sendMail("This is Subject",
-                    "This is Body",
-                    user,
-                    user);
-        } catch (Exception e) {
+        /*try {*/
+        String user = "bryangtz317@gmail.com";
+        String asunto = "Reporte ciudadano";
+        String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
+        mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
+        mensaje += datos[1] + " " + datos[1] + ". Con ubicacion en: " + datos[3] + datos[4] + "\n";
+        mensaje += "Sin mas por el momento, agradeceriamos la pronta resolucion\n";
+        mensaje += "Atentamente\nCiudadanos";
+        GMailSender sender = new GMailSender(getContext());
+        sender.enviarEmail(user, asunto, mensaje);
+        sender.adjuntarArchivo("");
+        Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
+        /*} catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }*/
-        String host="smtp.gmail.com";
+        /*String host="smtp.gmail.com";
         final String from="bryan.gtz.317@gmail.com";//change accordingly
         final String password="br31y07an97";//change accordingly
 
@@ -382,8 +436,24 @@ public class NuevoReporteActivity extends Fragment {
             Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
         } catch (MessagingException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        }*/
 
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
