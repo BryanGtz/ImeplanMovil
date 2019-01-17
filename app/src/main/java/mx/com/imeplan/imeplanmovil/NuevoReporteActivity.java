@@ -8,11 +8,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -120,6 +122,7 @@ public class NuevoReporteActivity extends Fragment {
     Bitmap bmp;
     ImageView img;
     String mCurrentPhotoPath;
+    private static final int TAKE_PHOTO = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -254,11 +257,11 @@ public class NuevoReporteActivity extends Fragment {
                     campoLongitud.setText("Direccion: "+direccion[0]);
                 }
             }
+            @Override
             public void onLocationChanged(Location location) {
                 Thread t = new Thread(new MyRunnable(location));
                 t.run();
                 t.interrupt();
-
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -304,6 +307,7 @@ public class NuevoReporteActivity extends Fragment {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
                     startActivityForResult(takePictureIntent, 0);
                 }
+                //startActivityForResult(takePictureIntent, TAKE_PHOTO);
 
             }
 
@@ -314,10 +318,20 @@ public class NuevoReporteActivity extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK){
-            Bundle ext = data.getExtras();
-            bmp = (Bitmap)ext.get("data");
-            img.setImageBitmap(bmp);
+        if(requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK){
+            //File file = new File(mCurrentPhotoPath);
+            /*Uri uri = data.getData();
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            } catch (IOException e){
+
+            }*/
+            /*Bundle ext = data.getExtras();
+            bmp = (Bitmap)ext.get("data");*/
+            //img.setImageBitmap(bmp);
+            //img.setImageURI(Uri.fromFile(file));
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath),64,64);
+            img.setImageBitmap(thumb);
         }
     }
 
@@ -385,7 +399,7 @@ public class NuevoReporteActivity extends Fragment {
         mensaje += "Atentamente\nCiudadanos";
         GMailSender sender = new GMailSender(getContext());
         sender.enviarEmail(user, asunto, mensaje);
-        sender.adjuntarArchivo("");
+        sender.adjuntarArchivo(mCurrentPhotoPath);
         Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
         /*} catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -440,19 +454,21 @@ public class NuevoReporteActivity extends Fragment {
 
     }
 
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName,".jpg", storageDir);
+        } catch (IOException e) {
 
+        }
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        if (image != null) {
+            mCurrentPhotoPath = image.getAbsolutePath();
+        }
         return image;
     }
 
