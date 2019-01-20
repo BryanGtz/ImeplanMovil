@@ -9,11 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +26,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -305,7 +308,7 @@ public class NuevoReporteActivity extends Fragment {
                             "mx.com.imeplan.imeplanmovil.android.fileprovider",photoFile
                     );
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
-                    startActivityForResult(takePictureIntent, 0);
+                    startActivityForResult(takePictureIntent, TAKE_PHOTO);
                 }
                 //startActivityForResult(takePictureIntent, TAKE_PHOTO);
 
@@ -330,8 +333,38 @@ public class NuevoReporteActivity extends Fragment {
             bmp = (Bitmap)ext.get("data");*/
             //img.setImageBitmap(bmp);
             //img.setImageURI(Uri.fromFile(file));
-            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath),64,64);
-            img.setImageBitmap(thumb);
+
+            //String ruta = guardarFoto(bmp);
+            //Log.d("Ruta: ",ruta);
+
+            ExifInterface exif = null;
+            int orientacion = 90;
+            try {
+                exif = new ExifInterface(mCurrentPhotoPath);
+                orientacion = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                                    ExifInterface.ORIENTATION_UNDEFINED);
+                switch (orientacion){
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        orientacion = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        orientacion = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        orientacion = 270;
+                        break;
+                    default:
+                        orientacion = 90;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Matrix m = new Matrix();
+            m.postRotate(orientacion);
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath),300,200);
+            bmp = Bitmap.createBitmap(thumb,0,0,thumb.getWidth(),thumb.getHeight(),m,true);
+            img.setImageBitmap(bmp);
+
         }
     }
 
@@ -390,7 +423,7 @@ public class NuevoReporteActivity extends Fragment {
 
     protected void sendEmail(String [] datos) {
         /*try {*/
-        String user = "bryangtz317@gmail.com";
+        String user = "bryan.gtz.317@gmail.com";
         String asunto = "Reporte ciudadano";
         String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
         mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
@@ -457,7 +490,7 @@ public class NuevoReporteActivity extends Fragment {
     private File createImageFile() {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "Imeplan_" + timeStamp;
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = null;
         try {
@@ -470,6 +503,12 @@ public class NuevoReporteActivity extends Fragment {
             mCurrentPhotoPath = image.getAbsolutePath();
         }
         return image;
+    }
+
+    private String guardarFoto(Bitmap b){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "Imeplan " + timeStamp;
+        return MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),b,imageFileName,"");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

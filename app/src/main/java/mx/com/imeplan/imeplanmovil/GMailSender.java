@@ -2,6 +2,7 @@ package mx.com.imeplan.imeplanmovil;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import javax.activation.DataHandler;
@@ -25,8 +26,8 @@ import java.util.Properties;
 public class GMailSender{
     String host = "smtp.gmail.com";
     String puerto = "465";
-    String usuario = "imeplansurdetamaulipas@tam.gob.mx";
-    String ctrsena = "NalpemI2018";
+    String usuario = "bryan.gtz.317@gmail.com";//"imeplansurdetamaulipas@tam.gob.mx";
+    String ctrsena = "br31y07an97";//"NalpemI2018";
     Properties props = new Properties();
     Session session;
     Message message;
@@ -51,6 +52,7 @@ public class GMailSender{
 
     public void adjuntarArchivo(String rutaArchivo){
         try {
+            Log.d("Ruta del archivo ",rutaArchivo);
             BodyPart messageBodyPart = new MimeBodyPart();
             DataSource source = new FileDataSource(rutaArchivo);
             DataHandler dh = new DataHandler(source);
@@ -77,7 +79,8 @@ public class GMailSender{
                     try {
                         Transport.send(message);
                     } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("Algo pasó aqui y no sé",e.toString());
                     }
                 }
             }).start();
