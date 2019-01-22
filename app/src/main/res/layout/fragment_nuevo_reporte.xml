@@ -41,7 +41,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -51,12 +51,13 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:background="#b3abab" />
+                    android:background="#b3abab"
+                    android:contentDescription=" " />
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.5" />
+                    android:layout_weight="2" />
 
             </LinearLayout>
 
@@ -117,9 +118,9 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="center_vertical|center_horizontal"
-            android:text="Latitud"
+            android:text="La direccion mostrada es aproximada (20 m)"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/campo_Longitud"
@@ -128,7 +129,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="center_vertical|center_horizontal"
-            android:text="Longitud"
+            android:text="Obteniendo ubicacion..."
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -136,7 +137,7 @@
             android:id="@+id/ubicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:ems="10"
             android:gravity="center_vertical|center_horizontal"
             android:text=""
@@ -148,7 +149,7 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:text="Registrar Reporte" />
 
         <Space
