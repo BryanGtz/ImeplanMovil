@@ -63,19 +63,17 @@ import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
  * Activities that contain this fragment must implement the
  * {@link NuevoReporteActivity.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NuevoReporteActivity#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class NuevoReporteActivity extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    //private static final String ARG_PARAM1 = "param1";
+    //private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //private String mParam1;
+    //private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,40 +85,39 @@ public class NuevoReporteActivity extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment NuevoReporteActivity.
      */
     // TODO: Rename and change types and number of parameters
-    public static NuevoReporteActivity newInstance(String param1, String param2) {
+    /*public static NuevoReporteActivity newInstance(String param1, String param2) {
         NuevoReporteActivity fragment = new NuevoReporteActivity();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
     }
 
     TextView campoLatitud, campoLongitud;
     String [] direccion=new String[2];
-    SQLiteOpenHelper conn;
+    ConexionSQLiteHelper conn;
     Button enviar, camara;
     double latitud, longitud;
-    int valor, valorSC;
+    int valorSC;
     int permissionCheckGPS;
     Spinner spinnerC, subCategoria;
     ConnectivityManager cm;
     NetworkInfo ni;
     int isInternet;
+
     View frag;
     Bitmap bmp;
     ImageView img;
@@ -134,36 +131,11 @@ public class NuevoReporteActivity extends Fragment {
         frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
         conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 1);
 
-        campoLatitud = (TextView) frag.findViewById(R.id.campo_Latitud);
-        campoLongitud = (TextView) frag.findViewById(R.id.campo_Longitud);
-        enviar = (Button) frag.findViewById(R.id.nvo_reporte);
-        camara = (Button) frag.findViewById(R.id.camera);
-        img = (ImageView)frag.findViewById(R.id.imageView);
+        init();
 
-        spinnerC = (Spinner) frag.findViewById(R.id.categoria);
-        subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
-
-        SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor;
-        String[]categorias;
-        try {
-            cursor = db.rawQuery("select " + Utilidades.C_CAMPO_CATEGORIA +
-                    " from " + Utilidades.TABLA_CATEGORIA, null);
-            categorias = new String[cursor.getCount()+1];
-            categorias[0]="--Seleccione una categoria---";
-            int i = 0;
-            while(cursor.moveToNext()&&i<cursor.getCount()){
-                categorias[i+1] = cursor.getString(0);
-                i++;
-            }
-            db.close();
-            cursor.close();
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categorias);
-            adapter.setDropDownViewResource(R.layout.spinner_item);
-            spinnerC.setAdapter(adapter);
-        }catch (Exception e){
-            Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, conn.getCategorias());
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        spinnerC.setAdapter(adapter);
 
         // Establecer Spinner
         spinnerC.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -175,23 +147,9 @@ public class NuevoReporteActivity extends Fragment {
                     subcategorias = new String[]{"--Seleccione una categoria--"};
                 }
                 else{
-                    SQLiteDatabase db = conn.getReadableDatabase();
-                    Cursor cursor = db.rawQuery("select "+Utilidades.SC_CAMPO_SUBCATEGORIA+
-                            " from "+Utilidades.TABLA_SUBCATEGORIA +
-                            " where "+Utilidades.SC_CAMPO_CATEGORIA+" = "+ position,null);
-                    subcategorias = new String[cursor.getCount()];
-                    int i = 0;
-                    if(cursor.moveToFirst()){
-                        do{
-                            subcategorias[i]=cursor.getString(0);
-                            i++;
-                        }
-                        while(cursor.moveToNext());
-                    }
-                    db.close();
-                    cursor.close();
+                    subcategorias = conn.getNombreSubcategorias(position);
                 }
-                //subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
+
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
                 adapter.setDropDownViewResource(R.layout.spinner_item);
                 subCategoria.setAdapter(adapter);
@@ -206,28 +164,8 @@ public class NuevoReporteActivity extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 String subnombre = subCategoria.getSelectedItem().toString();
                 if(!subnombre.equals("--Seleccione una categoria--")){
-                    SQLiteDatabase db = conn.getReadableDatabase();
-                    int[] subcategorias;
-                    Cursor cursor = db.rawQuery(
-                            "select "+Utilidades.SC_CAMPO_ID+
-                            " from "+Utilidades.TABLA_SUBCATEGORIA +
-                            " where "+Utilidades.SC_CAMPO_SUBCATEGORIA+" like '"+subnombre+"'",null);
-                    int num = cursor.getCount();
-                    subcategorias = new int[num];
-                    int i = 0;
-                    if(cursor.moveToFirst()){
-                        do{
-                            subcategorias[i]=cursor.getInt(0);
-                            i++;
-                        }
-                        while(cursor.moveToNext());
-                    }
-                    db.close();
-                    cursor.close();
-                    valorSC = subcategorias[0];
-                    //Toast.makeText(adapterView.getContext(),String.valueOf(valorSC),Toast.LENGTH_LONG).show();
+                    valorSC = conn.getIdSubcategoria(subnombre);
                 }
-
             }
 
             @Override
@@ -239,8 +177,23 @@ public class NuevoReporteActivity extends Fragment {
         // Obtener la Ubicación
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        // Register the listener with the Location Manager to receive location updates
+        permissionCheckGPS = ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Thread t = new Thread(new MyRunnable(location));
+                t.run();
+                t.interrupt();
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+
             class MyRunnable implements Runnable {
                 Location l;
                 public MyRunnable(Location location){
@@ -254,30 +207,12 @@ public class NuevoReporteActivity extends Fragment {
                         direccion = adress(latitud, longitud, getActivity().getApplicationContext());
                     }
                     catch(Exception e){
-
                     }
-                    campoLatitud.setText("Municipio: "+direccion[1]);
-                    campoLongitud.setText("Direccion: "+direccion[0]);
+                    campoLatitud.setText("La direccion mostrada es aproximada (20 m)");
+                    campoLongitud.setText(direccion[0]);
                 }
             }
-            @Override
-            public void onLocationChanged(Location location) {
-                Thread t = new Thread(new MyRunnable(location));
-                t.run();
-                t.interrupt();
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        permissionCheckGPS = ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        });
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,7 +273,7 @@ public class NuevoReporteActivity extends Fragment {
             //Log.d("Ruta: ",ruta);
 
             ExifInterface exif = null;
-            int orientacion = 90;
+            int orientacion = 0;
             try {
                 exif = new ExifInterface(mCurrentPhotoPath);
                 orientacion = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
@@ -354,7 +289,8 @@ public class NuevoReporteActivity extends Fragment {
                         orientacion = 270;
                         break;
                     default:
-                        orientacion = 90;
+                        orientacion = 0;
+                        break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -366,6 +302,18 @@ public class NuevoReporteActivity extends Fragment {
             img.setImageBitmap(bmp);
 
         }
+    }
+
+    //Método para inicializar
+    private void init(){
+        campoLatitud = (TextView) frag.findViewById(R.id.campo_Latitud);
+        campoLongitud = (TextView) frag.findViewById(R.id.campo_Longitud);
+        enviar = (Button) frag.findViewById(R.id.nvo_reporte);
+        camara = (Button) frag.findViewById(R.id.camera);
+        img = (ImageView)frag.findViewById(R.id.imageView);
+
+        spinnerC = (Spinner) frag.findViewById(R.id.categoria);
+        subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
     }
 
     private String[] adress(double lat, double log, Context c) throws IOException {
@@ -383,7 +331,6 @@ public class NuevoReporteActivity extends Fragment {
     private void limpiar() {
         campoLatitud.setText("");
         campoLongitud.setText("");
-        valor =0 ;
         valorSC = 0;
         spinnerC.setSelection(0);
         img.setImageBitmap(null);
