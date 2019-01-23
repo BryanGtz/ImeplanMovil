@@ -386,7 +386,7 @@ public class NuevoReporteActivity extends Fragment {
         valor =0 ;
         valorSC = 0;
         spinnerC.setSelection(0);
-
+        img.setImageBitmap(null);
     }
 
     private void registrarReporteSQL() {
@@ -394,7 +394,7 @@ public class NuevoReporteActivity extends Fragment {
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
                 "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
-                "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+"algo.jpg"+"'," +
+                "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+mCurrentPhotoPath+"'," +
                 "datetime(current_timestamp, 'localtime'),"+isInternet+")";
 
         db.execSQL(insert);
@@ -422,14 +422,109 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     protected void sendEmail(String [] datos) {
+
+        String mun = datos[2].split(" ")[1];
+        String user= "";
+        switch(mun) {
+            case "Tampico":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "adolfo.cabal@tam.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "servpublicos@tampico.gob.mx";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "secretariaecologiatampico@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Madero":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "adolfo.cabal@tam.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "any335@hotmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "direccionecologia@ciudadmadero.gob.mx";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Altamira":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "monje@comapaaltamira.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "secretariasp.altamira@gmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "illescasfrancisco@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Miramar":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "monje@comapaaltamira.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "secretariasp.altamira@gmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "illescasfrancisco@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "enoc.9714@gmail.com";
+                        break;
+                }
+                break;
+            default:
+                Toast.makeText(getContext(), "Fuera de la zona conurbada", Toast.LENGTH_LONG).show();
+                return;
+        }
         /*try {*/
-        String user = "bryan.gtz.317@gmail.com";
         String asunto = "Reporte ciudadano";
         String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
         mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
-        mensaje += datos[1] + " " + datos[1] + ". Con ubicacion en: " + datos[3] + datos[4] + "\n";
+        mensaje += datos[1] + " " + datos[0] + ". Con ubicacion en: " + datos[3] + "\n Fecha y hora: " + datos[4] + "\n";
         mensaje += "Sin mas por el momento, agradeceriamos la pronta resolucion\n";
-        mensaje += "Atentamente\nCiudadanos";
+        mensaje += "Atentamente:\nCiudadanos";
         GMailSender sender = new GMailSender(getContext());
         sender.enviarEmail(user, asunto, mensaje);
         sender.adjuntarArchivo(mCurrentPhotoPath);

@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -45,7 +46,7 @@ public class InfoReporteActivity extends AppCompatActivity {
     Button estado;
     ImageView foto;
     int ident, edo;
-    String cat, sc,fech, dir;
+    String cat, sc,fech, dir, ph;
     String [] info = new String[8];
     Bundle infoRep;
     ConnectivityManager cm;
@@ -77,6 +78,7 @@ public class InfoReporteActivity extends AppCompatActivity {
         cat = info[1];
         sc = info[2];
         dir = info[3] + ", " + info[4];
+        ph = info[5];
         fech = info[6];
         edo = Integer.parseInt(info[7]);
 
@@ -91,7 +93,8 @@ public class InfoReporteActivity extends AppCompatActivity {
                 cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 ni = cm.getActiveNetworkInfo();
 
-                if(ni != null && ni.isConnected() && sendEmail(info)){
+                if(ni != null && ni.isConnected()){
+                    sendEmail(info);
                     updateEstado();
                     miIntent = new Intent(InfoReporteActivity.this, ReporteCiudadano.class);
                     miIntent.putExtra("id", "11");
@@ -111,18 +114,128 @@ public class InfoReporteActivity extends AppCompatActivity {
         db.close();
     }
 
-    protected boolean sendEmail(String [] datos) {
-        String host="smtp.gmail.com";
+    protected void sendEmail(String [] datos) {
+
+        String mun = datos[2].split(" ")[1];
+        String user= "";
+        switch(mun) {
+            case "Tampico":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "adolfo.cabal@tam.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "servpublicos@tampico.gob.mx";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "secretariaecologiatampico@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Madero":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "adolfo.cabal@tam.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "any335@hotmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "direccionecologia@ciudadmadero.gob.mx";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Altamira":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "monje@comapaaltamira.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "secretariasp.altamira@gmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "illescasfrancisco@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "";
+                        break;
+                }
+                break;
+            case "Miramar":
+                switch (datos[1]) {
+                    case "COMAPA":
+                        user = "monje@comapaaltamira.gob.mx";
+                        break;
+                    case "Servicios públicos":
+                        user = "secretariasp.altamira@gmail.com";
+                        break;
+                    case "Cuadrilla ecológica":
+                        user = "illescasfrancisco@hotmail.com";
+                        break;
+                    case "Obras públicas":
+                        user = "";
+                        break;
+                    case "Vialidad":
+                        user = "";
+                        break;
+                    case "Otros":
+                        user = "enoc.9714@gmail.com";
+                        break;
+                }
+                break;
+            default:
+                Toast.makeText(getApplicationContext(), "Fuera de la zona conurbada", Toast.LENGTH_LONG).show();
+                return;
+        }
+        /*try {*/
+        String asunto = "Reporte ciudadano";
+        String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
+        mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
+        mensaje += datos[1] + " " + datos[2] + ". Con ubicacion en: " + datos[4] + "\n Fecha y hora: " + datos[6] + "\n";
+        mensaje += "Sin mas por el momento, agradeceriamos la pronta resolucion\n";
+        mensaje += "Atentamente:\nCiudadanos";
+        GMailSender sender = new GMailSender(getApplicationContext());
+        sender.enviarEmail(user, asunto, mensaje);
+        sender.adjuntarArchivo(ph);
+        Toast.makeText(getApplicationContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
+        /*} catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }*/
+        /*String host="smtp.gmail.com";
         final String from="bryan.gtz.317@gmail.com";//change accordingly
         final String password="br31y07an97";//change accordingly
 
-        String to="shanock.charras@gmail.com";//change accordingly
+        String to="bryan.gtz.317@gmail.com";//change accordingly
 
         String sub = "Reporte dirigido hacia "+datos[1];
-        String msg = "Subcategoría: "+datos[2]+"\n" +
-                "Latitud: "+datos[3]+"\n"+
-                "Longitud: "+datos[4]+"\n"+
-                "Fecha: "+datos[6];
+        String msg = "Subcategoría: "+datos[0]+"\n" +
+                "Latitud: "+datos[2]+"\n"+
+                "Longitud: "+datos[3]+"\n"+
+                "Fecha: "+datos[4];
 
         //Get the session object
         Properties props = new Properties();
@@ -155,11 +268,11 @@ public class InfoReporteActivity extends AppCompatActivity {
                     }
                 }
             }).start();
-            return true;
+            Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
         } catch (MessagingException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            return false;
-        }
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }*/
+
     }
 
     private void insertarInfo() {
@@ -173,6 +286,16 @@ public class InfoReporteActivity extends AppCompatActivity {
         subcategoria.setText(Html.fromHtml(subcategory));
         direccion.setText(Html.fromHtml(address));
         fecha.setText(Html.fromHtml(date));
+        insertarFoto();
+    }
+
+    private void insertarFoto() {
+        File imgFile = new File(ph);
+        if(imgFile.exists()){
+            Bitmap bmp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            foto.setImageBitmap(bmp);
+        } else
+            Toast.makeText(getApplicationContext(), "La imagen no existe", Toast.LENGTH_LONG).show();
     }
 }
 
