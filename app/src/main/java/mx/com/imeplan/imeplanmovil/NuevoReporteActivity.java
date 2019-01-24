@@ -413,7 +413,7 @@ public class NuevoReporteActivity extends Fragment {
                         user = "";
                         break;
                     case "Otros":
-                        user = "";
+                        user = "bryan.gtz.317@gmail.com";
                         break;
                 }
                 break;

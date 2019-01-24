@@ -44,9 +44,11 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             categorias = new String[cursor.getCount()+1];
             categorias[0]="--Seleccione una categoria---";
             int i = 0;
-            while(cursor.moveToNext()&&i<cursor.getCount()){
-                categorias[i+1] = cursor.getString(0);
-                i++;
+            if(cursor.moveToFirst()) {
+                do {
+                    categorias[i + 1] = cursor.getString(0);
+                    i++;
+                } while (cursor.moveToNext() && i < cursor.getCount());
             }
             db.close();
             cursor.close();
@@ -66,31 +68,30 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         String [] subcategorias = new String[count];
         int i = 0;
         if(cursor.moveToFirst()){
-            subcategorias[i]=cursor.getString(0);
-            i++;
-            while (cursor.moveToNext()&&i<count) {
+            do {
                 subcategorias[i] = cursor.getString(0);
                 i++;
-            }
+            } while (cursor.moveToNext() && i < count);
         }
         db.close();
         cursor.close();
         return subcategorias;
     }
 
-    public int getIdSubcategoria (String subnombre){
+    public int getIdSubcategoria (String subnombre) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select "+Utilidades.SC_CAMPO_ID+
-                        " from "+Utilidades.TABLA_SUBCATEGORIA +
-                        " where "+Utilidades.SC_CAMPO_SUBCATEGORIA+" like '"+subnombre+"'",null);
+        Cursor cursor = db.rawQuery("select " + Utilidades.SC_CAMPO_ID +
+                " from " + Utilidades.TABLA_SUBCATEGORIA +
+                " where " + Utilidades.SC_CAMPO_SUBCATEGORIA + " like '" + subnombre + "'", null);
         int num = cursor.getCount();
-        int [] subcategorias = new int[num];
+        Log.e("num", String.valueOf(num));
+        int[] subcategorias = new int[num];
         int i = 0;
-        if(cursor.moveToFirst()){
-            while (cursor.moveToNext()&&i<num) {
+        if (cursor.moveToFirst()) {
+            do {
                 subcategorias[i] = cursor.getInt(0);
                 i++;
-            }
+            } while (cursor.moveToNext());
         }
         db.close();
         cursor.close();
