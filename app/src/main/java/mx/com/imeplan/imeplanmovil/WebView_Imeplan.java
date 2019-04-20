@@ -1,6 +1,7 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
@@ -17,6 +18,9 @@ public class WebView_Imeplan extends AppCompatActivity {
         setContentView(R.layout.activity_webview_imeplan);
         wb = (WebView) findViewById(R.id.web_imeplan);
         wb.setWebViewClient(new WebViewClient());
+        wb.getSettings().setJavaScriptEnabled(true);
+        wb.getSettings().setPluginState(WebSettings.PluginState.ON);
+        //wb.getSettings().setPluginsEnabled(true);
         id = getIntent().getExtras().getInt("id");
 
         ejecutarWebView(id);
@@ -26,8 +30,9 @@ public class WebView_Imeplan extends AppCompatActivity {
     private void ejecutarWebView(int id) {
         switch (id){
             case 1:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 title = "Sitios de interés";
-                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx/2017/Interes.html");
+                wb.loadUrl("http://prezi.com/view/r7a1rR1e2YWilHPFZNMk/");
                 break;
             case 2:
                 title = "Movilidad";

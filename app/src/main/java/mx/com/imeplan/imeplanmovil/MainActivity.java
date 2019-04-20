@@ -1,15 +1,17 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity{
     ConnectivityManager cm;
     NetworkInfo ni;
     public final int MY_PERMISSION_REQUEST_GPS = 1;
+    public final int MY_GPS_ENABLEMENT_REQUEST = 2;
     private  String PREFS_KEY = "mispreferencias";
 
     @Override
@@ -42,13 +45,22 @@ public class MainActivity extends AppCompatActivity{
         }
         // Solicitar Permisos GPS
         permissionCheckGPS = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        solicitarGPS();
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        boolean isGPSEnabled = false;
+        if (lm != null) {
+            isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
+        if(isGPSEnabled){
+            solicitarGPS();
+        }
+        else{
+            String mensaje = "GPS apagado. ¿Desea habilitarlo?";
+            String titulo = "Configuración del GPS";
+            String intentName = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+            getSettingsDialog(mensaje,titulo,intentName).show();
+        }
 
-        mbtn01=(MagicButton)findViewById(R.id.magic_button01);
-        mbtn02=(MagicButton)findViewById(R.id.magic_button02);
-        mbtn03=(MagicButton)findViewById(R.id.magic_button03);
-        mbtn04=(MagicButton)findViewById(R.id.magic_button04);
-        mbtn05=(MagicButton)findViewById(R.id.magic_button05);
+        init();
 
         //Boton Plan de terreno
         mbtn01.setMagicButtonClickListener(new View.OnClickListener() {
@@ -101,8 +113,9 @@ public class MainActivity extends AppCompatActivity{
                 ni = cm.getActiveNetworkInfo();
 
                 if (ni != null && ni.isConnected()) {
-                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                    miIntent.putExtra("id", 2);
+                    //miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                    //miIntent.putExtra("id", 2);
+                    miIntent = new Intent(MainActivity.this, RutasActivity.class);
                     startActivity(miIntent);
                 }
                 else
@@ -128,14 +141,52 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    private void init() {
+        mbtn01 = findViewById(R.id.magic_button01);
+        mbtn02 = findViewById(R.id.magic_button02);
+        mbtn03 = findViewById(R.id.magic_button03);
+        mbtn04 = findViewById(R.id.magic_button04);
+        mbtn05 = findViewById(R.id.magic_button05);
+    }
+
+    public AlertDialog getSettingsDialog(String message, String title, final String intentName){
+        //Dialogo para activacion del GPS
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        // Setting Dialog Title
+        alertDialog.setTitle(title)
+        // Setting Dialog Message
+        .setMessage(message)
+        // Accion de Aceptacion button
+        .setPositiveButton("Configurar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(intentName);
+                startActivityForResult(intent,MY_GPS_ENABLEMENT_REQUEST);
+            }
+        });
+        // Acción de cancelacion
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        return alertDialog.create();
+    }
+
+    /**
+     * Método para solicitar permisos del gps al usuario
+     */
     private void solicitarGPS() {
         if (permissionCheckGPS != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Decir porque estamos solicitando permisos
+                //Han sido negados los permisos anteriormente
+                // (Aparece la opcion de no volver a mostrar)
+                // TODO: Decir porqué estamos solicitando permisos
+                // TODO: Tomar accion si se vuelven a negar los permisos
                 DialogoExplicacion();
 
             } else {
+                //Es la primer vez que se están solicitando los permisos
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSION_REQUEST_GPS);
@@ -146,20 +197,32 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSION_REQUEST_GPS) {
+            if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), "Permiso Denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
-        switch (requestCode){
-            case MY_PERMISSION_REQUEST_GPS:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        permissionCheckGPS = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheckGPS != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "Permiso Denegado", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Necesario activar GPS", Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
     public void DialogoExplicacion(){
-        String msj = "Descripcion here..";
+        String msj = "Para enviar los reportes necesitamos conocer su ubicación para ";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("¿Por qué necesitamos acceder a tu Ubicación?")
                .setMessage(msj)
@@ -179,7 +242,7 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences.Editor editor;
         editor= settings.edit();
         editor.putBoolean("license", mostrar);
-        editor.commit();
+        editor.apply();
     }
     public boolean getValuePreference(Context context){
         SharedPreferences sp= context.getSharedPreferences(PREFS_KEY,MODE_PRIVATE);

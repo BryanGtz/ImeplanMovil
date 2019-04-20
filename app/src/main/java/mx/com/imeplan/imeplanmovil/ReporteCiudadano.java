@@ -20,10 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReporteCiudadano extends AppCompatActivity implements
-        NuevoReporteActivity.OnFragmentInteractionListener,
-        MisReportesActivity.OnFragmentInteractionListener,
-        MisBorradoresActivity.OnFragmentInteractionListener{
+public class ReporteCiudadano extends AppCompatActivity {
 
     FragmentTransaction ft;
     final NuevoReporteActivity nuevo_reporte = new NuevoReporteActivity();
@@ -161,11 +158,4 @@ public class ReporteCiudadano extends AppCompatActivity implements
         }
     };
 
-
-
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

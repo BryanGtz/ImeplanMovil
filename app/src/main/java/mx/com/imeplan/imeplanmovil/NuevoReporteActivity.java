@@ -20,6 +20,7 @@ import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -60,42 +61,13 @@ import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NuevoReporteActivity.OnFragmentInteractionListener} interface
- * to handle interaction events.
  */
 public class NuevoReporteActivity extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
 
     public NuevoReporteActivity() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment NuevoReporteActivity.
-     */
-    // TODO: Rename and change types and number of parameters
-    /*public static NuevoReporteActivity newInstance(String param1, String param2) {
-        NuevoReporteActivity fragment = new NuevoReporteActivity();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +80,7 @@ public class NuevoReporteActivity extends Fragment {
 
     TextView campoLatitud, campoLongitud;
     String [] direccion=new String[2];
+    LocationHelper lh;
     ConexionSQLiteHelper conn;
     Button enviar, camara;
     double latitud, longitud;
@@ -129,7 +102,7 @@ public class NuevoReporteActivity extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
-        conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 1);
+        conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 2);
 
         init();
 
@@ -142,13 +115,9 @@ public class NuevoReporteActivity extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String[] subcategorias;
-                if(position==0){
-                    subcategorias = new String[]{"--Seleccione una categoria--"};
-                }
-                else{
-                    subcategorias = conn.getNombreSubcategorias(position);
-                }
+                String [] subcategorias = (position==0)
+                        ? new String[]{"--Seleccione una categoria--"}
+                        : conn.getNombreSubcategorias(position);
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(adapterView.getContext(), android.R.layout.simple_spinner_item, subcategorias);
                 adapter.setDropDownViewResource(R.layout.spinner_item);
@@ -174,45 +143,8 @@ public class NuevoReporteActivity extends Fragment {
             }
         });
 
-        // Obtener la Ubicación
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        // Register the listener with the Location Manager to receive location updates
-        permissionCheckGPS = ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Thread t = new Thread(new MyRunnable(location));
-                t.run();
-                t.interrupt();
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-
-            class MyRunnable implements Runnable {
-                Location l;
-                public MyRunnable(Location location){
-                    l = location;
-                }
-                @Override
-                public void run() {
-                    latitud =l.getLatitude();
-                    longitud =l.getLongitude();
-                    try {
-                        direccion = adress(latitud, longitud, getActivity().getApplicationContext());
-                    }
-                    catch(Exception e){
-                    }
-                    campoLatitud.setText("La direccion mostrada es aproximada (20 m)");
-                    campoLongitud.setText(direccion[0]);
-                }
-            }
-        });
+        //Obtener la ubicacion
+        lh = new LocationHelper(getContext(),250,1,campoLongitud);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,6 +184,7 @@ public class NuevoReporteActivity extends Fragment {
         });
         return frag;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -316,17 +249,7 @@ public class NuevoReporteActivity extends Fragment {
         subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
     }
 
-    private String[] adress(double lat, double log, Context c) throws IOException {
-        String [] r = new String [2];
-        Geocoder geocoder;
-        List<Address> address;
-        geocoder = new Geocoder(c, Locale.getDefault());
-        address = geocoder.getFromLocation(lat,log,1);
-        r[0] = address.get(0).getAddressLine(0);
-        r[1] = address.get(0).getLocality();
 
-        return r;
-    }
 
     private void limpiar() {
         campoLatitud.setText("");
@@ -341,7 +264,7 @@ public class NuevoReporteActivity extends Fragment {
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
                 "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
-                "'"+campoLatitud.getText().toString()+"','"+campoLongitud.getText().toString()+"','"+mCurrentPhotoPath+"'," +
+                "'"+String.valueOf(latitud)+"','"+String.valueOf(longitud)+"','"+mCurrentPhotoPath+"'," +
                 "datetime(current_timestamp, 'localtime'),"+isInternet+")";
 
         db.execSQL(insert);
@@ -364,7 +287,7 @@ public class NuevoReporteActivity extends Fragment {
             data[3] = c.getString(4);   // Longitud
             data[4] = c.getString(6);   // Fecha
         }
-
+        c.close();
         return data;
     }
 
@@ -553,42 +476,15 @@ public class NuevoReporteActivity extends Fragment {
         return MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),b,imageFileName,"");
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
