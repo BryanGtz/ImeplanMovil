@@ -78,13 +78,13 @@ public class NuevoReporteActivity extends Fragment {
         }*/
     }
 
-    TextView campoLatitud, campoLongitud;
+    TextView campoLatitud, campoLongitud; //direccion
     String [] direccion=new String[2];
     LocationHelper lh;
     ConexionSQLiteHelper conn;
     Button enviar, camara;
     double latitud, longitud;
-    int valorSC;
+    int valorSC = -1;
     int permissionCheckGPS;
     Spinner spinnerC, subCategoria;
     ConnectivityManager cm;
@@ -102,7 +102,7 @@ public class NuevoReporteActivity extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         frag = inflater.inflate(R.layout.fragment_nuevo_reporte, container, false);
-        conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db", null, 2);
+        conn = new ConexionSQLiteHelper(getContext());
 
         init();
 
@@ -153,6 +153,9 @@ public class NuevoReporteActivity extends Fragment {
                 cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 ni = cm.getActiveNetworkInfo();
                 isInternet = (ni != null && ni.isConnected()) ? 1 : 0;
+                if(valorSC>-1){
+
+                }
                 registrarReporteSQL();
                 limpiar();
             }
@@ -260,24 +263,44 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     private void registrarReporteSQL() {
+        latitud = lh.getLatitude();
+        longitud = lh.getLongitud();
+        String direccion;
+        if(campoLongitud.getText().equals(getString(R.string.obteniendo_ubicacion))){
+            direccion = "";
+        }
+        else{
+            direccion = campoLongitud.getText().toString();
+        }
+        //String address = lh.getAddress().get(0).getAddressLine(0);
         SQLiteDatabase db = conn.getWritableDatabase();
         String insert = "insert into "+Utilidades.TABLA_REPORTE+
-                "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+Utilidades.R_CAMPO_LATITUD+","+Utilidades.R_CAMPO_LONGITUD+","+Utilidades.R_CAMPO_FOTO+","+Utilidades.R_CAMPO_FECHA+","+Utilidades.R_CAMPO_ESTADO+")"+
+                "("+Utilidades.R_CAMPO_SUBCATEGORIA+","+
+                Utilidades.R_CAMPO_LATITUD+","+
+                Utilidades.R_CAMPO_LONGITUD+","+
+                Utilidades.R_CAMPO_DIRECCION+","+
+                Utilidades.R_CAMPO_FOTO+","+
+                Utilidades.R_CAMPO_FECHA+","+
+                Utilidades.R_CAMPO_ESTADO+")"+
                 " values("+String.valueOf(valorSC)+"," +
-                "'"+String.valueOf(latitud)+"','"+String.valueOf(longitud)+"','"+mCurrentPhotoPath+"'," +
+                "'"+String.valueOf(latitud)+"','"+String.valueOf(longitud)+"',"+
+                "'"+direccion+"',"+
+                "'"+mCurrentPhotoPath+"'," +
                 "datetime(current_timestamp, 'localtime'),"+isInternet+")";
 
         db.execSQL(insert);
         db.close();
 
-        if (isInternet == 1)
-            sendEmail(getReporte());
-        else
+        if (isInternet == 1) {
+            //sendEmail(getReporte());
+        }
+        else{
             Toast.makeText(getContext(), "Reporte enviado a mis borradores", Toast.LENGTH_LONG).show();
+        }
     }
 
     private String[] getReporte() {
-        String [] data = new String[5];
+        String [] data = new String[6];
         SQLiteDatabase db = conn.getReadableDatabase();
         Cursor c = db.rawQuery(Utilidades.VER_ULTIMO_REPORTE, null);
         while(c.moveToNext()){
@@ -286,6 +309,7 @@ public class NuevoReporteActivity extends Fragment {
             data[2] = c.getString(3);   // Latitud
             data[3] = c.getString(4);   // Longitud
             data[4] = c.getString(6);   // Fecha
+            data[5] = c.getString(8);  //Direccion
         }
         c.close();
         return data;
@@ -487,4 +511,8 @@ public class NuevoReporteActivity extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 }

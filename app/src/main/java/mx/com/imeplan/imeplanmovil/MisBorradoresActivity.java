@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import mx.com.imeplan.imeplanmovil.entidades.Reporte;
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
@@ -45,14 +49,14 @@ public class MisBorradoresActivity extends Fragment {
     ArrayList<String> listaInfo;
     Intent miIntent;
     Bundle infoReporte;
-    String [] infoR = new String [8];
+    String [] infoR = new String [9];
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View frag = inflater.inflate(R.layout.fragment_mis_borradores, container, false);
         context = frag.getContext();
-        conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db",null,2);
+        conn = new ConexionSQLiteHelper(getContext());
 
         sin_borrador = (TextView) frag.findViewById(R.id.s_borrador);
         listView_borradores = (ListView) frag.findViewById(R.id.lista_borradores);
@@ -78,7 +82,16 @@ public class MisBorradoresActivity extends Fragment {
                     infoR [4] = listaBorradores.get(i).getLongitud();
                     infoR [5] = listaBorradores.get(i).getFoto();
                     infoR [6] = listaBorradores.get(i).getFecha();
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date d = sdf.parse(infoR[6]);
+                        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        infoR[6] = sdf.format(d);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     infoR [7] = Integer.toString(listaBorradores.get(i).getEstado());
+                    infoR [8] = listaBorradores.get(i).getDireccion();
                     infoReporte.putStringArray("array", infoR);
                     miIntent.putExtras(infoReporte);
                     startActivity(miIntent);
@@ -105,6 +118,7 @@ public class MisBorradoresActivity extends Fragment {
             reporte.setFoto(cursor.getString(5));
             reporte.setFecha(cursor.getString(6));
             reporte.setEstado(cursor.getInt(7));
+            reporte.setDireccion(cursor.getString(8));
             listaBorradores.add(reporte);
         }
         getLista();

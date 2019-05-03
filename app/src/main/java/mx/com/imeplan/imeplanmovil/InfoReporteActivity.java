@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -47,7 +49,7 @@ public class InfoReporteActivity extends AppCompatActivity {
     ImageView foto;
     int ident, edo;
     String cat, sc,fech, dir, ph;
-    String [] info = new String[8];
+    String [] info = new String[9];
     Bundle infoRep;
     ConnectivityManager cm;
     NetworkInfo ni;
@@ -59,7 +61,7 @@ public class InfoReporteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inf_reporte);
 
-        conn = new ConexionSQLiteHelper(this, "bd_imeplanMovil.db", null, 1);
+        conn = new ConexionSQLiteHelper(this);
 
         identificador = (TextView) findViewById(R.id.info_id);
         categoria = (TextView) findViewById(R.id.info_cat);
@@ -77,7 +79,19 @@ public class InfoReporteActivity extends AppCompatActivity {
         ident = Integer.parseInt(info[0]);
         cat = info[1];
         sc = info[2];
-        dir = info[3] + ", " + info[4];
+        //dir = info[3] + ", " + info[4];
+        if(info[8].equals("")){
+            Location l = new Location("");
+            Log.e("coordinates",info[3]+", "+info[4]);
+            l.setLatitude(Double.parseDouble(info[3]));
+            l.setLongitude(Double.parseDouble(info[4]));
+            LocationTask lt = new LocationTask(getBaseContext(),l,direccion,2);
+            lt.execute();
+            Log.e("dir","Entra");
+        }
+        else{
+            dir = info[8];
+        }
         ph = info[5];
         fech = info[6];
         edo = Integer.parseInt(info[7]);

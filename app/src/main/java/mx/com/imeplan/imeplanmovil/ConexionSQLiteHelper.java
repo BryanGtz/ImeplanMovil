@@ -11,8 +11,12 @@ import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
-    public ConexionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public static final int DATABASE_VERSION = 3;
+    public static final String DATABASE_NAME =  "bd_imeplanMovil.db";
+
+
+    public ConexionSQLiteHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

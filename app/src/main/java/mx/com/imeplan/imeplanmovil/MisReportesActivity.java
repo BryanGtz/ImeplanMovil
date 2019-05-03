@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import mx.com.imeplan.imeplanmovil.entidades.Reporte;
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
@@ -43,7 +47,7 @@ public class MisReportesActivity extends Fragment {
     Intent miIntent;
     Bundle infoReportes;
     SQLiteOpenHelper conn;
-    String [] infoR = new String [8];
+    String [] infoR = new String [9];
     Context context;
 
     @Override
@@ -53,7 +57,7 @@ public class MisReportesActivity extends Fragment {
         View frag = inflater.inflate(R.layout.fragment_mis_reportes, container, false);
         context = frag.getContext();
 
-        conn = new ConexionSQLiteHelper(getContext(), "bd_imeplanMovil.db",null,1);
+        conn = new ConexionSQLiteHelper(getContext());
         sin_reporte = (TextView) frag.findViewById(R.id.s_reporte);
         listView_reportes = (ListView) frag.findViewById(R.id.lista_reportes);
         consultarListaReportes();
@@ -79,7 +83,17 @@ public class MisReportesActivity extends Fragment {
                     infoR [4] = listaReportes.get(i).getLongitud();
                     infoR [5] = listaReportes.get(i).getFoto();
                     infoR [6] = listaReportes.get(i).getFecha();
+                    Date d;
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        d = sdf.parse(infoR[6]);
+                        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        infoR[6] = sdf.format(d);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     infoR [7] = Integer.toString(listaReportes.get(i).getEstado());
+                    infoR [8] = listaReportes.get(i).getDireccion();
                     infoReportes.putStringArray("array", infoR);
                     miIntent.putExtras(infoReportes);
                     startActivity(miIntent);
@@ -105,13 +119,15 @@ public class MisReportesActivity extends Fragment {
             reporte.setFoto(cursor.getString(5));
             reporte.setFecha(cursor.getString(6));
             reporte.setEstado(cursor.getInt(7));
+            reporte.setDireccion(cursor.getString(8));
             listaReportes.add(reporte);
         }
         obtenerLista();
+        cursor.close();
     }
 
     private void obtenerLista() {
-        listaInfo = new ArrayList<String>();
+        listaInfo = new ArrayList<>();
 
         for(int i=0; i<listaReportes.size(); i++){
             listaInfo.add(listaReportes.get(i).getId()+" - "+listaReportes.get(i).getSubcategoria());

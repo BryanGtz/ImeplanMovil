@@ -52,7 +52,7 @@ public class LocationHelper {
      *
      */
 
-    public LocationHelper(Context c, int minTime, int minDist, TextView tvLocation) {
+    public LocationHelper(Context c, int minTime, int minDist, final TextView tvLocation) {
         context = c;
         this.tvLocation = tvLocation;
         lm = (LocationManager)context.getSystemService(LOCATION_SERVICE);
@@ -75,7 +75,7 @@ public class LocationHelper {
                     @Override
                     public void onLocationChanged(Location location) {
                         l = location;
-                        LocationTask lt = new LocationTask();
+                        LocationTask lt = new LocationTask(context,l,tvLocation,1);
                         lt.execute();
                         Log.e("locationChanged", location.getLatitude() + ", " + location.getLongitude());
                     }
@@ -125,21 +125,7 @@ public class LocationHelper {
 
     }
 
-    public List<Address> getAddress(){
-        List<Address> addresses = null;
-        if(Geocoder.isPresent()){
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            try{
-                addresses = geocoder.getFromLocation(l.getLatitude(),l.getLongitude(),GEOCODER_MAX_RESULTS);
-                Set<Address> uniqueAddress = new HashSet<>(addresses);
-                addresses = new ArrayList<>(uniqueAddress);
-            }
-            catch (Exception e){
 
-            }
-        }
-        return addresses;
-    }
 
     public AlertDialog getSettingsDialog(String message, String title, final String intentName){
         //Dialogo para activacion del GPS
@@ -164,31 +150,14 @@ public class LocationHelper {
         return alertDialog.create();
     }
 
-    private class LocationTask extends AsyncTask<Void,Void,String[]>{
-
-        @Override
-        protected String[] doInBackground(Void... voids) {
-            List<Address> addresses = getAddress();
-            String[] resultados = new String[addresses.size()];
-            Log.e("numAddress",addresses.size()+"");
-            if(addresses!=null&&!addresses.isEmpty()){
-                for (int i = 0; i < addresses.size(); i++) {
-                    resultados[i] = addresses.get(i).getAddressLine(0);
-                    Log.e("numIndex",addresses.get(i).getMaxAddressLineIndex()+"");
-                    for (int j = 0; j <= addresses.get(i).getMaxAddressLineIndex(); j++) {
-                        Log.e("AddressesLine",addresses.get(i).getAddressLine(j));
-                    }
-                }
-
-            }
-            return resultados;
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            super.onPostExecute(result);
-            tvLocation.setText(result[0]);
-        }
+    public double getLatitude(){
+        return (l!=null) ? l.getLatitude(): 0.0;
     }
+
+    public double getLongitud(){
+        return (l!=null) ? l.getLongitude(): 0.0;
+    }
+
+
 
 }

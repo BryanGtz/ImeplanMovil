@@ -22,6 +22,7 @@ public class Utilidades {
     public static final String R_CAMPO_FOTO = "foto";
     public static final String R_CAMPO_FECHA = "fecha";
     public static final String R_CAMPO_ESTADO = "estado";
+    public static final String R_CAMPO_DIRECCION = "direccion";
 
     public static final String CREAR_TABLA_CATEGORIA =
             "create table if not exists "+TABLA_CATEGORIA+" ("+C_CAMPO_ID+" INTEGER PRIMARY KEY, "+C_CAMPO_CATEGORIA+" TEXT)";
@@ -31,8 +32,15 @@ public class Utilidades {
                     SC_CAMPO_SUBCATEGORIA+" TEXT, FOREIGN KEY("+SC_CAMPO_CATEGORIA+") REFERENCES "+TABLA_CATEGORIA+"("+C_CAMPO_ID+"))";
 
     public static final String CREAR_TABLA_REPORTE =
-            "create table if not exists "+TABLA_REPORTE+" ("+R_CAMPO_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+R_CAMPO_SUBCATEGORIA+" INTEGER, "+R_CAMPO_LATITUD+" TEXT, " +
-                    R_CAMPO_LONGITUD+" TEXT, "+R_CAMPO_FOTO+" TEXT, "+R_CAMPO_FECHA+" DATE, "+R_CAMPO_ESTADO+" INTEGER, " +
+            "create table if not exists "+TABLA_REPORTE+" ("+
+                    R_CAMPO_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                    R_CAMPO_SUBCATEGORIA+" INTEGER, "+
+                    R_CAMPO_LATITUD+" TEXT, " +
+                    R_CAMPO_LONGITUD+" TEXT, "+
+                    R_CAMPO_DIRECCION+" TEXT, "+
+                    R_CAMPO_FOTO+" TEXT, "+
+                    R_CAMPO_FECHA+" DATE, "+
+                    R_CAMPO_ESTADO+" INTEGER, " +
                     "FOREIGN KEY("+R_CAMPO_SUBCATEGORIA+") REFERENCES "+TABLA_SUBCATEGORIA+"("+SC_CAMPO_ID+"))";
 
     // Llenar tabla Categorias
@@ -70,8 +78,8 @@ public class Utilidades {
     // Ver reporte
     public static final String VER_REPORTE = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
             +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
-            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
-            +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
+            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+","+TABLA_REPORTE+"."+R_CAMPO_DIRECCION+
+            " from " +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
             " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
             " where "+R_CAMPO_ESTADO+" = 1;";
@@ -79,8 +87,8 @@ public class Utilidades {
     // Ver borrador
     public static final String VER_BORRADOR = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
             +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
-            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
-            +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
+            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+","+TABLA_REPORTE+"."+R_CAMPO_DIRECCION+
+            " from "+TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
             " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
             " where "+R_CAMPO_ESTADO+" = 0;";
@@ -88,8 +96,8 @@ public class Utilidades {
     // Ver ultimo reporte
     public static final String VER_ULTIMO_REPORTE = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA
             +","+TABLA_CATEGORIA+"."+C_CAMPO_CATEGORIA+","+TABLA_REPORTE+"."+R_CAMPO_LATITUD+","+TABLA_REPORTE+"."+R_CAMPO_LONGITUD+","
-            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+" from "
-            +TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
+            +TABLA_REPORTE+"."+R_CAMPO_FOTO+","+TABLA_REPORTE+"."+R_CAMPO_FECHA+","+TABLA_REPORTE+"."+R_CAMPO_ESTADO+","+TABLA_REPORTE+"."+R_CAMPO_DIRECCION+
+            " from "+TABLA_CATEGORIA+" join "+TABLA_SUBCATEGORIA+" join "+TABLA_REPORTE+
             " on "+TABLA_CATEGORIA+"."+C_CAMPO_ID+"="+TABLA_SUBCATEGORIA+"."+SC_CAMPO_CATEGORIA+
             " and "+TABLA_SUBCATEGORIA+"."+SC_CAMPO_ID+"="+TABLA_REPORTE+"."+R_CAMPO_SUBCATEGORIA+"" +
             " where Reporte."+R_CAMPO_ID+" = (select MAX(Reporte.id) from Reporte);";

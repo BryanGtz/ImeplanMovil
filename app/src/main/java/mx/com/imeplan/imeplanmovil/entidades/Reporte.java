@@ -1,5 +1,9 @@
 package mx.com.imeplan.imeplanmovil.entidades;
 
+/**
+ * Entidad reporte
+ */
+
 public class Reporte {
     private int id;
     private String subcategoria;
@@ -9,8 +13,10 @@ public class Reporte {
     private String foto;
     private String fecha;
     private int estado;
+    private String direccion;
 
-    public Reporte(int id, String subcategoria, String categoria, String latitud, String longitud, String foto, String fecha, int estado) {
+    public Reporte(int id, String subcategoria, String categoria, String latitud, String longitud,
+                   String foto, String fecha, int estado,String direccion) {
         this.id = id;
         this.subcategoria = subcategoria;
         this.categoria = categoria;
@@ -19,6 +25,7 @@ public class Reporte {
         this.foto = foto;
         this.fecha = fecha;
         this.estado = estado;
+        this.direccion = direccion;
     }
 
     public Reporte(){
@@ -87,5 +94,13 @@ public class Reporte {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }
