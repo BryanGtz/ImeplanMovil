@@ -74,17 +74,8 @@ public class MainActivity extends AppCompatActivity{
         mbtn02.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Revisar conexion a Internet
-                cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                ni = cm.getActiveNetworkInfo();
-
-                if (ni != null && ni.isConnected()) {
-                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                    miIntent.putExtra("id", 1);
-                    startActivity(miIntent);
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
+                miIntent = new Intent(MainActivity.this, SitiosInteres.class);
+                startActivity(miIntent);
             }
         });
         //Boton Reporte ciudadano

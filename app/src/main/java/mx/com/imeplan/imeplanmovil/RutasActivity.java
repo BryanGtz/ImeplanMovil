@@ -108,7 +108,9 @@ public class RutasActivity extends FragmentActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 */
+        /*
         try {
+
             KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.r10, getApplicationContext());
             kmlLayer.addLayerToMap();
             KmlLayer kmlLayer2 = new KmlLayer(mMap, R.raw.r2, getApplicationContext());
@@ -122,5 +124,6 @@ public class RutasActivity extends FragmentActivity implements OnMapReadyCallbac
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
+        */
     }
 }
