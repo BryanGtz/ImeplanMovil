@@ -131,100 +131,100 @@ public class InfoReporteActivity extends AppCompatActivity {
     protected void sendEmail(String [] datos) {
 
         String mun = datos[2].split(" ")[1];
-        String user= "";
-        switch(mun) {
+        String user= "pablo090597@gmail.com";
+/*        switch(mun) {
             case "Tampico":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "adolfo.cabal@tam.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "servpublicos@tampico.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//servpublicos@tampico.gob.mx
                         break;
                     case "Cuadrilla ecológica":
-                        user = "secretariaecologiatampico@hotmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//secretariaecologiatampico@hotmail.com
                         break;
                     case "Obras públicas":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                 }
                 break;
             case "Madero":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "adolfo.cabal@tam.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "any335@hotmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//any335@hotmail.com
                         break;
                     case "Cuadrilla ecológica":
-                        user = "direccionecologia@ciudadmadero.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//direccionecologia@ciudadmadero.gob.mx
                         break;
                     case "Obras públicas":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                 }
                 break;
             case "Altamira":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "monje@comapaaltamira.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "secretariasp.altamira@gmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
                         break;
                     case "Cuadrilla ecológica":
-                        user = "illescasfrancisco@hotmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
                         break;
                     case "Obras públicas":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                 }
                 break;
             case "Miramar":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "monje@comapaaltamira.gob.mx";
+                        user = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "secretariasp.altamira@gmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
                         break;
                     case "Cuadrilla ecológica":
-                        user = "illescasfrancisco@hotmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
                         break;
                     case "Obras públicas":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "";
+                        user = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "enoc.9714@gmail.com";
+                        user = "gildardo.ponce@tam.gob.mx";//enoc.9714@gmail.com
                         break;
                 }
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "Fuera de la zona conurbada", Toast.LENGTH_LONG).show();
                 return;
-        }
+        }*/
         /*try {*/
         String asunto = "Reporte ciudadano";
         String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
