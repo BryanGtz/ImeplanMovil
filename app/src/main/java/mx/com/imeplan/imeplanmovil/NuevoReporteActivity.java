@@ -94,7 +94,7 @@ public class NuevoReporteActivity extends Fragment {
     View frag;
     Bitmap bmp;
     ImageView img;
-    String mCurrentPhotoPath;
+    String mCurrentPhotoPath = "";
     private static final int TAKE_PHOTO = 0;
 
     @Override
@@ -156,8 +156,16 @@ public class NuevoReporteActivity extends Fragment {
                 if(valorSC>-1){
 
                 }
-                registrarReporteSQL();
-                limpiar();
+
+                if (!mCurrentPhotoPath.isEmpty() && valorSC != -1){
+                    Toast.makeText(getContext(), "Reporte Enviado", Toast.LENGTH_SHORT).show();
+                    registrarReporteSQL();
+                    limpiar();
+                }
+                else
+                    Toast.makeText(getContext(), "Los datos deben estar llenos", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
@@ -252,16 +260,17 @@ public class NuevoReporteActivity extends Fragment {
         subCategoria = (Spinner) frag.findViewById(R.id.campo_SubCategoria);
     }
 
-
-
+    // Método para limpiar la pantalla cuando se guarde el reporte
     private void limpiar() {
         campoLatitud.setText("");
         campoLongitud.setText("");
         valorSC = 0;
         spinnerC.setSelection(0);
+        mCurrentPhotoPath = "";
         img.setImageBitmap(null);
     }
 
+    // Método para guardar el reporte en la base de datos
     private void registrarReporteSQL() {
         latitud = lh.getLatitude();
         longitud = lh.getLongitud();
@@ -315,6 +324,7 @@ public class NuevoReporteActivity extends Fragment {
         return data;
     }
 
+    // Método para enviar el reporte al correo correcto
     protected void sendEmail(String [] datos) {
 
         String mun = datos[2].split(" ")[1];
@@ -494,6 +504,7 @@ public class NuevoReporteActivity extends Fragment {
         return image;
     }
 
+    // Método para guardar la foto en el teléfono
     private String guardarFoto(Bitmap b){
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Imeplan " + timeStamp;

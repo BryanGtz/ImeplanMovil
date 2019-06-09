@@ -30,15 +30,10 @@ public class WebView_Imeplan extends AppCompatActivity {
     private void ejecutarWebView(int id) {
         switch (id){
             case 1:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                title = "Sitios de interés";
-                wb.loadUrl("http://prezi.com/view/r7a1rR1e2YWilHPFZNMk/");
+                title = "Movilidad";
+                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx/movil1.0/fusiontables.html");
                 break;
             case 2:
-                title = "Movilidad";
-                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx");
-                break;
-            case 3:
                 title = "Calculadora ambiental";
                 wb.loadUrl("http://calculadoraambiental.imeplansurdetamaulipas.gob.mx/");
                 break;

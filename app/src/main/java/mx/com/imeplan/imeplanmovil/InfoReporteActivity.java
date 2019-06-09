@@ -108,7 +108,7 @@ public class InfoReporteActivity extends AppCompatActivity {
                 ni = cm.getActiveNetworkInfo();
 
                 if(ni != null && ni.isConnected()){
-                    sendEmail(info);
+                    //sendEmail(info);
                     updateEstado();
                     miIntent = new Intent(InfoReporteActivity.this, ReporteCiudadano.class);
                     miIntent.putExtra("id", "11");

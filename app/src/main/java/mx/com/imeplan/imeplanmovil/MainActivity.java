@@ -18,12 +18,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import br.com.bloder.magic.view.MagicButton;
 
 public class MainActivity extends AppCompatActivity{
     MagicButton mbtn01, mbtn02, mbtn03, mbtn04, mbtn05;
+    ImageButton btn_creditos;
     Intent miIntent = null;
     int permissionCheckGPS;
     ConnectivityManager cm;
@@ -106,7 +109,8 @@ public class MainActivity extends AppCompatActivity{
                 if (ni != null && ni.isConnected()) {
                     //miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
                     //miIntent.putExtra("id", 2);
-                    miIntent = new Intent(MainActivity.this, RutasActivity.class);
+                    miIntent = new Intent(MainActivity.this, CreditosActivity.class);
+                    //miIntent.putExtra("id", 1);
                     startActivity(miIntent);
                 }
                 else
@@ -123,11 +127,18 @@ public class MainActivity extends AppCompatActivity{
 
                 if (ni != null && ni.isConnected()) {
                     miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
-                    miIntent.putExtra("id", 3);
+                    miIntent.putExtra("id", 2);
                     startActivity(miIntent);
                 }
                 else
                     Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Botón para acceder a los créditos
+        btn_creditos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CreditosActivity.class));
             }
         });
     }
@@ -138,6 +149,7 @@ public class MainActivity extends AppCompatActivity{
         mbtn03 = findViewById(R.id.magic_button03);
         mbtn04 = findViewById(R.id.magic_button04);
         mbtn05 = findViewById(R.id.magic_button05);
+        btn_creditos = (ImageButton) findViewById(R.id.btn_creditos);
     }
 
     public AlertDialog getSettingsDialog(String message, String title, final String intentName){

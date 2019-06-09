@@ -86,6 +86,9 @@
             android:name=".PlanDeOrdenamientoActivity"
             android:label="POT" />
         <activity android:name=".OnBoarding" />
+        <activity
+            android:name=".CreditosActivity"
+            android:label="@string/title_Creditos" />
     </application>
 
 </manifest>
