@@ -26,8 +26,8 @@ import java.util.Properties;
 public class GMailSender{
     String host = "smtp.gmail.com";
     String puerto = "465";
-    String usuario = "bryan.gtz.317@gmail.com";//"imeplansurdetamaulipas@tam.gob.mx";
-    String ctrsena = "br31y07an97";//"NalpemI2018";
+    String usuario = "imeplan.reporte@gmail.com";
+    String ctrsena = "Tamaulipas2019";
     Properties props = new Properties();
     Session session;
     Message message;

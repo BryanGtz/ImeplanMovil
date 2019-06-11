@@ -30,12 +30,16 @@ public class WebView_Imeplan extends AppCompatActivity {
     private void ejecutarWebView(int id) {
         switch (id){
             case 1:
-                title = "Movilidad";
-                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx/movil1.0/fusiontables.html");
+                title = "Rutas de Transporte";
+                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx/rutastransporte.html");
                 break;
             case 2:
                 title = "Calculadora ambiental";
                 wb.loadUrl("http://calculadoraambiental.imeplansurdetamaulipas.gob.mx/");
+                break;
+            case 3:
+                title = "IMEPLAN";
+                wb.loadUrl("http://www.imeplansurdetamaulipas.gob.mx");
                 break;
         }
     }

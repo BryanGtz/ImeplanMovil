@@ -24,6 +24,7 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
     public final static int GEOCODER_MAX_RESULTS = 5;
     private TextView tvLocation;
     int sourceCode;
+    String municipio;
 
     public LocationTask(Context c, Location location, TextView txtview, int sourceCode){
         Log.e("lt constructor","Construyendose location task");
@@ -44,6 +45,7 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
                 addresses = geocoder.getFromLocation(l.getLatitude(),l.getLongitude(),GEOCODER_MAX_RESULTS);
                 Set<Address> uniqueAddress = new HashSet<>(addresses);
                 addresses = new ArrayList<>(uniqueAddress);
+                municipio = addresses.get(0).getLocality();
             }
             catch (Exception e){
                 Log.e("error",e.getMessage());
@@ -53,6 +55,10 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
             Log.e("no entra","geocoder is not present");
         }
         return addresses;
+    }
+
+    public String getMunicipio(){
+        return municipio;
     }
 
     @Override
@@ -95,7 +101,6 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
                     tvLocation.setText(result[0]);
                     break;
             }
-
         }
     }
 }

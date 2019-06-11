@@ -79,7 +79,7 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     TextView campoLatitud, campoLongitud; //direccion
-    String [] direccion=new String[2];
+    String municipio;
     LocationHelper lh;
     ConexionSQLiteHelper conn;
     Button enviar, camara;
@@ -153,12 +153,10 @@ public class NuevoReporteActivity extends Fragment {
                 cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 ni = cm.getActiveNetworkInfo();
                 isInternet = (ni != null && ni.isConnected()) ? 1 : 0;
-                if(valorSC>-1){
-
-                }
 
                 if (!mCurrentPhotoPath.isEmpty() && valorSC != -1){
                     Toast.makeText(getContext(), "Reporte Enviado", Toast.LENGTH_SHORT).show();
+                    municipio = lh.getMunicipio();
                     registrarReporteSQL();
                     limpiar();
                 }
@@ -301,7 +299,7 @@ public class NuevoReporteActivity extends Fragment {
         db.close();
 
         if (isInternet == 1) {
-            //sendEmail(getReporte());
+            sendEmail(getReporte());
         }
         else{
             Toast.makeText(getContext(), "Reporte enviado a mis borradores", Toast.LENGTH_LONG).show();
@@ -327,163 +325,102 @@ public class NuevoReporteActivity extends Fragment {
     // Método para enviar el reporte al correo correcto
     protected void sendEmail(String [] datos) {
 
-        String mun = datos[2].split(" ")[1];
-        String user= "pablo090597@gmail.com";
-/*        switch(mun) {
+        String mun = municipio.split(" ")[1];
+        Toast.makeText(getContext(), "Mun: " + mun, Toast.LENGTH_SHORT).show();
+        String mail= "enoc.9714@gmail.com", dependencia = "IMEPLAN", cargo = "Dirección de Medio Ambiente";
+        switch(mun) {
             case "Tampico":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
+                        mail = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
+                        dependencia = "COMAPA";
+                        cargo = "Atención Ciudadana";
                         break;
                     case "Servicios públicos":
-                        user = "gildardo.ponce@tam.gob.mx";//servpublicos@tampico.gob.mx
+                        mail = "gildardo.ponce@tam.gob.mx";//servpublicos@tampico.gob.mx
                         break;
                     case "Cuadrilla ecológica":
-                        user = "gildardo.ponce@tam.gob.mx";//secretariaecologiatampico@hotmail.com
+                        mail = "gildardo.ponce@tam.gob.mx";//secretariaecologiatampico@hotmail.com
+                        dependencia = "IMEPLAN";
+                        cargo = "Dirección de Medio Ambiente";
                         break;
                     case "Obras públicas":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
                         break;
                 }
                 break;
             case "Madero":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
+                        mail = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "gildardo.ponce@tam.gob.mx";//any335@hotmail.com
+                        mail = "gildardo.ponce@tam.gob.mx";//any335@hotmail.com
                         break;
                     case "Cuadrilla ecológica":
-                        user = "gildardo.ponce@tam.gob.mx";//direccionecologia@ciudadmadero.gob.mx
+                        mail = "gildardo.ponce@tam.gob.mx";//direccionecologia@ciudadmadero.gob.mx
                         break;
                     case "Obras públicas":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "gildardo.ponce@tam.gob.mx";
+                        mail = "gildardo.ponce@tam.gob.mx";
                         break;
                     case "Otros":
-                        user = "gildardo.ponce@tam.gob.mx";//bryan.gtz.317@gmail.com
-                        break;
-                }
-                break;
-            case "Altamira":
-                switch (datos[1]) {
-                    case "COMAPA":
-                        user = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
-                        break;
-                    case "Servicios públicos":
-                        user = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
-                        break;
-                    case "Cuadrilla ecológica":
-                        user = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
-                        break;
-                    case "Obras públicas":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
-                        break;
-                    case "Vialidad":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
-                        break;
-                    case "Otros":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//bryan.gtz.317@gmail.com
                         break;
                 }
                 break;
             case "Miramar":
+            case "Altamira":
                 switch (datos[1]) {
                     case "COMAPA":
-                        user = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
+                        mail = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
                         break;
                     case "Servicios públicos":
-                        user = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
+                        mail = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
                         break;
                     case "Cuadrilla ecológica":
-                        user = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
+                        mail = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
                         break;
                     case "Obras públicas":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Vialidad":
-                        user = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                     case "Otros":
-                        user = "gildardo.ponce@tam.gob.mx";//enoc.9714@gmail.com
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
                 }
                 break;
             default:
                 Toast.makeText(getContext(), "Fuera de la zona conurbada", Toast.LENGTH_LONG).show();
                 return;
-        }*/
-        /*try {*/
+        }
+
+        mail = "enoc.9714@gmail.com";
+
         String asunto = "Reporte ciudadano";
-        String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
-        mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
-        mensaje += datos[1] + " " + datos[0] + ". Con ubicacion en: " + datos[3] + "\n Fecha y hora: " + datos[4] + "\n";
-        mensaje += "Sin mas por el momento, agradeceriamos la pronta resolucion\n";
+        String mensaje = cargo + "\n" + dependencia + "\n";
+        mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano:\n";
+        mensaje += "Categoría: " + datos[1] + "\nSubcategoría: " + datos[0] +
+                "\nCon ubicacion en: " + datos[5] + "\n" + datos[2] + "," + datos[3] +
+                "\nFecha y hora: " + datos[4] + "\n";
+        mensaje += "Sin mas por el momento, agradeceríamos la pronta resolución\n";
         mensaje += "Atentamente:\nCiudadanos";
         GMailSender sender = new GMailSender(getContext());
-        sender.enviarEmail(user, asunto, mensaje);
+        sender.enviarEmail(mail, asunto, mensaje);
         sender.adjuntarArchivo(mCurrentPhotoPath);
         Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
-        /*} catch (Exception e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }*/
-        /*String host="smtp.gmail.com";
-        final String from="bryan.gtz.317@gmail.com";//change accordingly
-        final String password="br31y07an97";//change accordingly
-
-        String to="bryan.gtz.317@gmail.com";//change accordingly
-
-        String sub = "Reporte dirigido hacia "+datos[1];
-        String msg = "Subcategoría: "+datos[0]+"\n" +
-                "Latitud: "+datos[2]+"\n"+
-                "Longitud: "+datos[3]+"\n"+
-                "Fecha: "+datos[4];
-
-        //Get the session object
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-        //get Session
-        Session session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(from,password);
-                    }
-                });
-        //compose message
-        try {
-            final MimeMessage message = new MimeMessage(session);
-            message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
-            message.setSubject(sub);
-            message.setText(msg);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Transport.send(message);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-            Toast.makeText(getContext(), "Reporte enviado exitosamente", Toast.LENGTH_LONG).show();
-        } catch (MessagingException e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }*/
-
     }
 
     private File createImageFile() {

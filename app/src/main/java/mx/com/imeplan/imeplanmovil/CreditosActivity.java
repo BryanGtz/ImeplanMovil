@@ -18,14 +18,9 @@ public class CreditosActivity extends AppCompatActivity {
 
         animacion = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.creditos);
         creditos = (TextView) findViewById(R.id.creditos);
-        String texto = "Aplicación creada por alumnos del Instituto Teconógico de Ciudad Madero" +
-                " en conjunto con el IMEPLAN.\n\n" +
-                "- Bryan Steven Gutiérrez Castro\n" +
-                "- Pablo Eduardo Hernández Vicente\n" +
-                "- Enoc Alberto Martínez Olivares\n\n\n" +
+        String texto =
                 "Dirreción del IMEPLAN:\n\n" +
-                "Av. Miguel Hidalgo 3509, Guadalupe, 89210 Tampico, Tamps.\n\n\n" +
-                "Copyright \u00a9 2019.";
+                "Av. Miguel Hidalgo 3509, Guadalupe, 89210 Tampico, Tamps.\n\n\n";
         creditos.setText(texto);
         creditos.startAnimation(animacion);
     }

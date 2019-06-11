@@ -10,7 +10,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/logo_imeplan"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:scaleType="fitXY"
@@ -44,7 +44,7 @@
         app:icon_button_color="#43B4E4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/logo_imeplan"
         app:magic_button_size="75dp"
         android:layout_weight="1"/>
 
@@ -112,22 +112,22 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
 
+        android:layout_weight="1"
         app:button_icon="@drawable/aa_rutas"
         app:button_icon_height="50dp"
+
         app:button_icon_width="50dp"
-
         app:expandable_area_color="#fff"
-        app:hide_text="Movilidad"
 
+        app:hide_text="Rutas de Transporte"
         app:hide_text_color="#0064A7"
         app:hide_text_size="5dp"
-        app:icon_button_color="#97c93d"
 
+        app:icon_button_color="#97c93d"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/magic_button03"
-        app:magic_button_size="75dp"
-        android:layout_weight="1"/>
+        app:magic_button_size="75dp" />
 
     <br.com.bloder.magic.view.MagicButton
         android:id="@+id/magic_button05"

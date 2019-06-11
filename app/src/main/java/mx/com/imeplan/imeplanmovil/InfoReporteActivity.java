@@ -87,6 +87,7 @@ public class InfoReporteActivity extends AppCompatActivity {
             l.setLongitude(Double.parseDouble(info[4]));
             LocationTask lt = new LocationTask(getBaseContext(),l,direccion,2);
             lt.execute();
+            dir = lt.getAddress().get(0).toString();
             Log.e("dir","Entra");
         }
         else{
@@ -108,11 +109,12 @@ public class InfoReporteActivity extends AppCompatActivity {
                 ni = cm.getActiveNetworkInfo();
 
                 if(ni != null && ni.isConnected()){
-                    //sendEmail(info);
+                    sendEmail(info);
                     updateEstado();
                     miIntent = new Intent(InfoReporteActivity.this, ReporteCiudadano.class);
                     miIntent.putExtra("id", "11");
                     startActivity(miIntent);
+                    finish();
                 }else{
                     Toast.makeText(getApplicationContext(), "Sin conexión a Internet", Toast.LENGTH_LONG).show();
                 }
@@ -130,8 +132,8 @@ public class InfoReporteActivity extends AppCompatActivity {
 
     protected void sendEmail(String [] datos) {
 
-        String mun = datos[2].split(" ")[1];
-        String user= "pablo090597@gmail.com";
+        //String mun = datos[2].split(" ")[1];
+        String user= "enoc.9714@gmail.com";
 /*        switch(mun) {
             case "Tampico":
                 switch (datos[1]) {
@@ -229,7 +231,7 @@ public class InfoReporteActivity extends AppCompatActivity {
         String asunto = "Reporte ciudadano";
         String mensaje = "Ing. Gildardo\nJefe de Medio Ambiente\n";
         mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano\n";
-        mensaje += datos[1] + " " + datos[2] + ". Con ubicacion en: " + datos[4] + "\n Fecha y hora: " + datos[6] + "\n";
+        mensaje += datos[1] + " " + datos[2] + ". Con ubicacion en: " + dir + "\n Fecha y hora: " + datos[6] + "\n";
         mensaje += "Sin mas por el momento, agradeceriamos la pronta resolucion\n";
         mensaje += "Atentamente:\nCiudadanos";
         GMailSender sender = new GMailSender(getApplicationContext());

@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import br.com.bloder.magic.view.MagicButton;
@@ -27,6 +28,7 @@ import br.com.bloder.magic.view.MagicButton;
 public class MainActivity extends AppCompatActivity{
     MagicButton mbtn01, mbtn02, mbtn03, mbtn04, mbtn05;
     ImageButton btn_creditos;
+    ImageView logo_imeplan;
     Intent miIntent = null;
     int permissionCheckGPS;
     ConnectivityManager cm;
@@ -107,10 +109,10 @@ public class MainActivity extends AppCompatActivity{
                 ni = cm.getActiveNetworkInfo();
 
                 if (ni != null && ni.isConnected()) {
-                    //miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                    miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
                     //miIntent.putExtra("id", 2);
-                    miIntent = new Intent(MainActivity.this, CreditosActivity.class);
-                    //miIntent.putExtra("id", 1);
+                    //miIntent = new Intent(MainActivity.this, CreditosActivity.class);
+                    miIntent.putExtra("id", 1);
                     startActivity(miIntent);
                 }
                 else
@@ -141,6 +143,15 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(new Intent(MainActivity.this, CreditosActivity.class));
             }
         });
+        // Botón para abrir la página del Imeplan
+        logo_imeplan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                miIntent = new Intent(MainActivity.this, WebView_Imeplan.class);
+                miIntent.putExtra("id", 3);
+                startActivity(miIntent);
+            }
+        });
     }
 
     private void init() {
@@ -149,7 +160,8 @@ public class MainActivity extends AppCompatActivity{
         mbtn03 = findViewById(R.id.magic_button03);
         mbtn04 = findViewById(R.id.magic_button04);
         mbtn05 = findViewById(R.id.magic_button05);
-        btn_creditos = (ImageButton) findViewById(R.id.btn_creditos);
+        btn_creditos = findViewById(R.id.btn_creditos);
+        logo_imeplan = findViewById(R.id.logo_imeplan);
     }
 
     public AlertDialog getSettingsDialog(String message, String title, final String intentName){
@@ -225,7 +237,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void DialogoExplicacion(){
-        String msj = "Para enviar los reportes necesitamos conocer su ubicación para ";
+        String msj = "Para enviar los reportes necesitamos conocer su ubicación, así la dependencia encargada localizará el reporte" +
+                " y será atendido más rápido.";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("¿Por qué necesitamos acceder a tu Ubicación?")
                .setMessage(msj)

@@ -46,6 +46,8 @@ public class LocationHelper {
     Location l;
     final int GEOCODER_MAX_RESULTS = 2;
     TextView tvLocation;
+    String municipio;
+    LocationTask lt;
 
     /**
      *
@@ -75,7 +77,7 @@ public class LocationHelper {
                     @Override
                     public void onLocationChanged(Location location) {
                         l = location;
-                        LocationTask lt = new LocationTask(context,l,tvLocation,1);
+                        lt = new LocationTask(context,l,tvLocation,1);
                         lt.execute();
                         Log.e("locationChanged", location.getLatitude() + ", " + location.getLongitude());
                     }
@@ -158,6 +160,8 @@ public class LocationHelper {
         return (l!=null) ? l.getLongitude(): 0.0;
     }
 
-
+    public String getMunicipio(){
+        return lt.getMunicipio();
+    }
 
 }

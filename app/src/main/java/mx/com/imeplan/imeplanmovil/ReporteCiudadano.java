@@ -83,7 +83,8 @@ public class ReporteCiudadano extends AppCompatActivity {
     }
 
     public void DialogoExplicacion(){
-        String msj = "Descripcion here...";
+        String msj = "Porque necesitamos estar seguros que el reporte que mandas existe; la forma en la que lo" +
+                "corroboramos es observando la foto que tomas.";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("¿Por qué necesitamos acceder a tu Cámara?")
                 .setMessage(msj)
