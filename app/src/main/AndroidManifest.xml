@@ -12,11 +12,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:screenOrientation="portrait"
         android:maxSdkVersion="18" />
 
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.gps"
+        android:screenOrientation="portrait"/>
     <uses-feature
         android:name="android.hardware.camera"
+        android:screenOrientation="portrait"
         android:required="true" />
 
     <application
@@ -43,6 +46,7 @@
 
         <activity
             android:name=".RutasActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_rutas">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -51,16 +55,19 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
+            android:screenOrientation="portrait"
             android:authorities="mx.com.imeplan.imeplanmovil.android.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
+                android:screenOrientation="portrait"
                 android:resource="@xml/file_paths" />
         </provider>
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,6 +77,7 @@
         </activity>
         <activity
             android:name=".ReporteCiudadano"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_reporte_ciudadano"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -78,16 +86,21 @@
         </activity>
         <activity
             android:name=".WebView_Imeplan"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_webview" />
         <activity
             android:name=".InfoReporteActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_info_reporte" />
         <activity
             android:name=".PlanDeOrdenamientoActivity"
+            android:screenOrientation="portrait"
             android:label="POT" />
-        <activity android:name=".OnBoarding" />
+        <activity android:name=".OnBoarding"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CreditosActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_Creditos" />
     </application>
 

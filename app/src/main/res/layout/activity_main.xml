@@ -37,9 +37,10 @@
         app:button_icon_width="50dp"
         app:expandable_area_color="#fff"
 
-        app:hide_text="                 Plan de Ordenamiento Territorial"
+        app:hide_text="     Plan de Ordenamiento \n Territorial"
+
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="4sp"
 
         app:icon_button_color="#43B4E4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,9 +66,10 @@
         app:expandable_area_color="#fff"
         app:icon_button_color="#97c93d"
 
-        app:hide_text="       Sitios de Interés"
+        app:hide_text="     Sitios de Interés"
+
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="4sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,9 +94,10 @@
         app:icon_button_color="#43B4E4"
         app:expandable_area_color="#fff"
 
-        app:hide_text="      Reporte Ciudadano"
+        app:hide_text="     Reporte Ciudadano"
+
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="4sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,9 +122,10 @@
         app:button_icon_width="50dp"
         app:expandable_area_color="#fff"
 
-        app:hide_text="Rutas de Transporte"
+        app:hide_text="     Rutas de Transporte"
+
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="4sp"
 
         app:icon_button_color="#97c93d"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,9 +150,10 @@
         app:expandable_area_color="#fff"
         app:icon_button_color="#43B4E4"
 
-        app:hide_text="        Calculadora Ambiental"
+        app:hide_text="     Calculadora Ambiental"
+
         app:hide_text_color="#0064A7"
-        app:hide_text_size="5dp"
+        app:hide_text_size="4sp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
