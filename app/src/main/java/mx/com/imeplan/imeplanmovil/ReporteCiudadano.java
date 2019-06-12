@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
@@ -27,9 +28,7 @@ public class ReporteCiudadano extends AppCompatActivity {
     final MisReportesActivity mis_reportes = new MisReportesActivity();
     final MisBorradoresActivity mis_borradores = new MisBorradoresActivity();
     int permissionCheckCAMERA;
-    int permissionCheckStorage;
     public final int MY_PERMISSION_REQUEST_CAMERA = 1;
-    public final int MY_PERMISSION_REQUEST_STORAGE = 1;
     int type;
     Bitmap bmp;
     ImageView img;
@@ -40,12 +39,7 @@ public class ReporteCiudadano extends AppCompatActivity {
         setContentView(R.layout.activity_reporte_ciudadano);
 
         // Solicitar permisos Camara
-        permissionCheckCAMERA = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         solicitarCAMARA();
-
-        //Solicitar permisos para almacenar imagenes
-        permissionCheckStorage = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        solicitarAlmacenamiento();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -69,16 +63,11 @@ public class ReporteCiudadano extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode){
-            case MY_PERMISSION_REQUEST_CAMERA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Permiso Denegado", Toast.LENGTH_SHORT).show();
-                    DialogoExplicacion();
-                }
-                break;
-            
+        if(requestCode == MY_PERMISSION_REQUEST_CAMERA){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(getApplicationContext(), "Permiso Asignado", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(), "Permiso Denegado", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -100,35 +89,23 @@ public class ReporteCiudadano extends AppCompatActivity {
     }
 
     private void solicitarCAMARA() {
+        permissionCheckCAMERA = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+
         if (permissionCheckCAMERA != PackageManager.PERMISSION_GRANTED) {
+            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_REQUEST_CAMERA);
+            }*/
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-
                 // Decir porque estamos solicitando permisos
+                DialogoExplicacion();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA},
                         MY_PERMISSION_REQUEST_CAMERA);
-            }
-        }
-    }
-
-    private void solicitarAlmacenamiento(){
-        if (permissionCheckStorage != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Decir porque estamos solicitando permisos
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        MY_PERMISSION_REQUEST_STORAGE);
             }
         }
     }

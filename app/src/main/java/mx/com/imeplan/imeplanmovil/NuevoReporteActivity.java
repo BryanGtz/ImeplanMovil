@@ -2,8 +2,11 @@ package mx.com.imeplan.imeplanmovil;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -24,9 +27,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +90,6 @@ public class NuevoReporteActivity extends Fragment {
     Button enviar, camara;
     double latitud, longitud;
     int valorSC = -1;
-    int permissionCheckGPS;
     Spinner spinnerC, subCategoria;
     ConnectivityManager cm;
     NetworkInfo ni;
@@ -96,6 +100,7 @@ public class NuevoReporteActivity extends Fragment {
     ImageView img;
     String mCurrentPhotoPath = "";
     private static final int TAKE_PHOTO = 0;
+    int permissionCheckCAMERA;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,15 +160,21 @@ public class NuevoReporteActivity extends Fragment {
                 isInternet = (ni != null && ni.isConnected()) ? 1 : 0;
 
                 if (!mCurrentPhotoPath.isEmpty() && valorSC != -1){
-                    Toast.makeText(getContext(), "Reporte Enviado", Toast.LENGTH_SHORT).show();
                     municipio = lh.getMunicipio();
-                    registrarReporteSQL();
-                    limpiar();
+                    if(municipio == null){
+                        Toast.makeText(getContext(), "Fuera de la zona conurbada", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(municipio.equals("Tampico") || municipio.equals("Ciudad Madero") || municipio.equals("Altamira") || municipio.equals("Miramar")){
+                        //Toast.makeText(getContext(), "Reporte Enviado", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), ""+municipio+"", Toast.LENGTH_SHORT).show();
+                        registrarReporteSQL();
+                        limpiar();
+                    } else
+                        Toast.makeText(getContext(), "Fuera de la zona conurbada", Toast.LENGTH_SHORT).show();
                 }
                 else
                     Toast.makeText(getContext(), "Los datos deben estar llenos", Toast.LENGTH_SHORT).show();
-
-
             }
         });
 
@@ -171,29 +182,51 @@ public class NuevoReporteActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 //Abrir la camara
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                }catch (Exception e){
+                if(camaraPermiso()){
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    }catch (Exception e){
 
+                    }
+                    if(photoFile != null){
+                        Uri photoURI = FileProvider.getUriForFile(
+                                NuevoReporteActivity.this.getActivity().getBaseContext(),
+                                "mx.com.imeplan.imeplanmovil.android.fileprovider",photoFile
+                        );
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                        startActivityForResult(takePictureIntent, TAKE_PHOTO);
+                    }
+                } else{
+                    dialogoPermiso();
                 }
-                if(photoFile != null){
-                    Uri photoURI = FileProvider.getUriForFile(
-                            NuevoReporteActivity.this.getActivity().getBaseContext(),
-                            "mx.com.imeplan.imeplanmovil.android.fileprovider",photoFile
-                    );
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
-                    startActivityForResult(takePictureIntent, TAKE_PHOTO);
-                }
-                //startActivityForResult(takePictureIntent, TAKE_PHOTO);
-
             }
 
         });
         return frag;
     }
 
+    public void dialogoPermiso(){
+        String msj = "Debes de conceder el permiso a la aplicación para tomar fotos.\n" +
+                "Ve a <b>Configuración</b> > <b>Aplicaciones</b> > <b>Imeplan Movil</b> > <b>Permisos</b>";
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("¡IMPORTANTE!")
+                .setMessage(Html.fromHtml(msj))
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getContext(), "Permiso necesario", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+    }
+
+
+    private boolean camaraPermiso() {
+        permissionCheckCAMERA = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
+        return (permissionCheckCAMERA != PackageManager.PERMISSION_GRANTED) ? false : true;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -325,10 +358,8 @@ public class NuevoReporteActivity extends Fragment {
     // Método para enviar el reporte al correo correcto
     protected void sendEmail(String [] datos) {
 
-        String mun = municipio.split(" ")[1];
-        Toast.makeText(getContext(), "Mun: " + mun, Toast.LENGTH_SHORT).show();
-        String mail= "enoc.9714@gmail.com", dependencia = "IMEPLAN", cargo = "Dirección de Medio Ambiente";
-        switch(mun) {
+        String mail, dependencia = "IMEPLAN", cargo = "Dirección de Medio Ambiente";
+        switch(municipio) {
             case "Tampico":
                 switch (datos[1]) {
                     case "COMAPA":
@@ -357,7 +388,7 @@ public class NuevoReporteActivity extends Fragment {
                         break;
                 }
                 break;
-            case "Madero":
+            case "Ciudad Madero":
                 switch (datos[1]) {
                     case "COMAPA":
                         mail = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx

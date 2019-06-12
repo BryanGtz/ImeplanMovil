@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -87,11 +88,9 @@ public class MainActivity extends AppCompatActivity{
         mbtn03.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    // Decir porque estamos solicitando permisos
-                    DialogoExplicacion();
-
+                permissionCheckGPS = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+                if (permissionCheckGPS != PackageManager.PERMISSION_GRANTED) {
+                    DialogoExplicacionPermiso();
                 }
                 else {
                     miIntent = new Intent(MainActivity.this, ReporteCiudadano.class);
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
-        //Boton Movilidad
+        //Boton rutas de transporte
         mbtn04.setMagicButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +151,21 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(miIntent);
             }
         });
+    }
+
+    private void DialogoExplicacionPermiso() {
+        String msj = "Debes de conceder el permiso a la aplicación para acceder a tu ubicación.\n" +
+                "Ve a <b>Configuración</b> > <b>Aplicaciones</b> > <b>Imeplan Movil</b> > <b>Permisos</b>";
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("¡IMPORTANTE!")
+                .setMessage(Html.fromHtml(msj))
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(), "Permiso necesario", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
     }
 
     private void init() {
@@ -219,6 +233,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,7 +249,7 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(getApplicationContext(), "Necesario activar GPS", Toast.LENGTH_LONG)
                     .show();
         }
-    }
+    }*/
 
     public void DialogoExplicacion(){
         String msj = "Para enviar los reportes necesitamos conocer su ubicación, así la dependencia encargada localizará el reporte" +
