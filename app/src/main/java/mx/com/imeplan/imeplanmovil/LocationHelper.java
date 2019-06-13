@@ -39,6 +39,7 @@ public class LocationHelper {
 
     Context context;
     LocationManager lm;
+    LocationListener ll;
     int permissionGPS;
     boolean isGPSEnabled;
     boolean isNetworkEnabled;
@@ -73,11 +74,11 @@ public class LocationHelper {
         if (locationProvider != null && !locationProvider.isEmpty()) {
             permissionGPS = ContextCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION);
             if (permissionGPS == PackageManager.PERMISSION_GRANTED) {
-                lm.requestLocationUpdates(locationProvider, minTime, minDist, new LocationListener() {
+                ll = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
                         l = location;
-                        lt = new LocationTask(context,l,tvLocation,1);
+                        lt = new LocationTask(context, l, tvLocation, 1);
                         lt.execute();
                         Log.e("locationChanged", location.getLatitude() + ", " + location.getLongitude());
                     }
@@ -108,7 +109,8 @@ public class LocationHelper {
                             getSettingsDialog(mensaje, titulo, intentName).show();
                         }
                     }
-                });
+                };
+                lm.requestLocationUpdates(locationProvider, minTime, minDist, ll);
             }
         }
         //Sino, volver a revisar qué proveedor está disponible dando prioridad al gps
@@ -161,7 +163,12 @@ public class LocationHelper {
     }
 
     public String getMunicipio(){
-        return lt.getMunicipio();
+        if(lt!=null){
+            Log.e("null", "locationTask es null");
+            return lt.getMunicipio();
+        }else{
+            return "";
+        }
     }
 
 }
