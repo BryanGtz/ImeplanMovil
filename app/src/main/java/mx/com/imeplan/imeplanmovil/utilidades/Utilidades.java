@@ -46,34 +46,40 @@ public class Utilidades {
     // Llenar tabla Categorias
     public static final String INSERTAR_CATEGORIAS =
             "insert into "+TABLA_CATEGORIA+" ("+C_CAMPO_ID+","+C_CAMPO_CATEGORIA+") values" +
-                    "(1,'COMAPA'),"+
-                    "(2,'Servicios públicos'),"+
+                    "(1,'Vialidad'),"+
+                    "(2,'Obras públicas'),"+
                     "(3,'Cuadrilla ecológica'),"+
-                    "(4,'Obras públicas'),"+
-                    "(5,'Vialidad'),"+
-                    "(6,'Otros');";
+                    "(4,'Servicios públicos'),"+
+                    "(5,'COMAPA'),"+
+                    "(6,'Protección civil'),"+
+                    "(7,'Transporte público');";
 
     // Llenar tabla SubCategorias
     public static final String INSERTAR_SUBCATEGORIAS =
             "insert into "+TABLA_SUBCATEGORIA+" values" +
-                    "(1,1,'Fuga de agua'),"+
-                    "(2,1,'Corte de agua'),"+
-                    "(3,1,'Azolve de drenaje'),"+
-                    "(4,2,'Recolección de basura'),"+
-                    "(5,2,'Alumbrado publico'),"+
-                    "(6,2,'Poste caido'),"+
+                    "(1,1,'Accidente'),"+
+                    "(2,1,'Tope'),"+
+                    "(3,1,'Semáforo sin funcionar'),"+
+                    "(4,2,'Calle sin pavimentar'),"+
+                    "(5,2,'Desechos de construcción'),"+
+                    "(6,2,'Reencarpetado'),"+
                     "(7,2,'Bache'),"+
                     "(8,3,'Árbol caído'),"+
                     "(9,3,'Maltrato animal'),"+
                     "(10,3,'Reporte sanitario'),"+
-                    "(11,4,'Calle sin pavimentar'),"+
-                    "(12,4,'Desechos de construcción'),"+
-                    "(13,4,'Reencarpetado'),"+
-                    "(14,4,'Tope'),"+
-                    "(15,5,'Accidente frecuente'),"+
-                    "(16,5,'Vialidad peligrosa'),"+
-                    "(17,5,'Semaforo sin funcionar'),"+
-                    "(18,6,'General');";
+                    "(11,4,'Recolección de basura'),"+
+                    "(12,4,'Alumbrado público'),"+
+                    "(13,4,'Poste caído'),"+
+                    "(14,4,'Mantenimiento de áreas'),"+
+                    "(15,5,'Fuga de agua'),"+
+                    "(16,5,'Corte de agua'),"+
+                    "(17,5,'Azolve de drenaje'),"+
+                    "(18,6,'Lagartos y cocodrilos'),"+
+                    "(19,6,'Bomberos'),"+
+                    "(20,6,'Inundaciones'),"+
+                    "(21,7,'Violación de ruta'),"+
+                    "(22,7,'Violación de cuota'),"+
+                    "(23,7,'Mal manejo');";
 
     // Ver reporte
     public static final String VER_REPORTE = "select "+TABLA_REPORTE+"."+R_CAMPO_ID+","+TABLA_SUBCATEGORIA+"."+SC_CAMPO_SUBCATEGORIA

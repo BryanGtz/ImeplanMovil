@@ -213,7 +213,7 @@ public class NuevoReporteActivity extends Fragment {
     }
 
     public void dialogoPermiso(){
-        String msj = "Debes de conceder el permiso a la aplicación para tomar fotos.\n" +
+        String msj = "Debes de conceder el permiso a la aplicación para tomar fotos.<br>" +
                 "Ve a <b>Configuración</b> > <b>Aplicaciones</b> > <b>Imeplan Movil</b> > <b>Permisos</b>";
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("¡IMPORTANTE!")
@@ -395,7 +395,12 @@ public class NuevoReporteActivity extends Fragment {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
-                    case "Otros":
+                    case "Transporte público":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         dependencia = "IMEPLAN";
                         cargo = "Jefatura de Informática";
@@ -419,8 +424,15 @@ public class NuevoReporteActivity extends Fragment {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";
                         break;
-                    case "Otros":
-                        mail = "gildardo.ponce@tam.gob.mx";//bryan.gtz.317@gmail.com
+                    case "Transporte público":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
                         break;
                 }
                 break;
@@ -442,8 +454,15 @@ public class NuevoReporteActivity extends Fragment {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
-                    case "Otros":
+                    case "Transporte público":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
                         break;
                 }
                 break;

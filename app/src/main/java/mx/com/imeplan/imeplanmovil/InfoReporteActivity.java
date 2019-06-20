@@ -197,7 +197,12 @@ public class InfoReporteActivity extends AppCompatActivity {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
-                    case "Otros":
+                    case "Transporte público":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         dependencia = "IMEPLAN";
                         cargo = "Jefatura de Informática";
@@ -221,8 +226,15 @@ public class InfoReporteActivity extends AppCompatActivity {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";
                         break;
-                    case "Otros":
-                        mail = "gildardo.ponce@tam.gob.mx";//bryan.gtz.317@gmail.com
+                    case "Transporte público":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
                         break;
                 }
                 break;
@@ -244,8 +256,15 @@ public class InfoReporteActivity extends AppCompatActivity {
                     case "Vialidad":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
                         break;
-                    case "Otros":
+                    case "Transporte público":
                         mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
+                        break;
+                    case "Protección civil":
+                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        dependencia = "IMEPLAN";
+                        cargo = "Jefatura de Informática";
                         break;
                 }
                 break;
