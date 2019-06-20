@@ -172,5 +172,5 @@
         android:paddingBottom="20dp"
         android:paddingRight="10dp"
         app:srcCompat="@drawable/ic_info_creditos" />
-
+    <!-- BHBHB-->
 </LinearLayout>
