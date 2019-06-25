@@ -372,67 +372,69 @@ public class NuevoReporteActivity extends Fragment {
     // Método para enviar el reporte al correo correcto
     protected void sendEmail(String [] datos) {
 
-        String mail = "", dependencia = "IMEPLAN", cargo = "Dirección de Medio Ambiente";
+        String mail = "", dependencia = "";
         switch(municipio) {
             case "Tampico":
                 switch (datos[1]) {
                     case "COMAPA":
-                        mail = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
-                        dependencia = "COMAPA";
-                        cargo = "Atención Ciudadana";
+                        mail = "sandra.sanchez@tam.gob.mx";
+                        dependencia = "COMAPA Zona Conurbada";
                         break;
                     case "Servicios públicos":
-                        mail = "gildardo.ponce@tam.gob.mx";//servpublicos@tampico.gob.mx
+                        mail = "spub.gmtampico2018@gmail.com";
+                        dependencia = "Servicios públicos";
                         break;
                     case "Cuadrilla ecológica":
-                        mail = "gildardo.ponce@tam.gob.mx";//secretariaecologiatampico@hotmail.com
-                        dependencia = "IMEPLAN";
-                        cargo = "Dirección de Medio Ambiente";
+                        mail = "secretariaecologiatampico@hotmail.com";
+                        dependencia = "Ecología";
                         break;
                     case "Obras públicas":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "spub.gmtampico2018@gmail.com";
+                        dependencia = "Obras públicas";
                         break;
                     case "Vialidad":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "STVTARJETATAMPICO@GMAIL.COM";
+                        dependencia = "Tránsito";
                         break;
                     case "Transporte público":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "transporte.zonaconurbada@tam.gob.mx";
+                        dependencia = "Transporte público";
                         break;
                     case "Protección civil":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "bomberos@tampico.gob.mx";
+                        dependencia = "Protección Civil";
                         break;
                 }
                 break;
             case "Ciudad Madero":
                 switch (datos[1]) {
                     case "COMAPA":
-                        mail = "gildardo.ponce@tam.gob.mx";//adolfo.cabal@tam.gob.mx
+                        mail = "sandra.sanchez@tam.gob.mx";
+                        dependencia = "COMAPA Zona Conurbada";
                         break;
                     case "Servicios públicos":
-                        mail = "gildardo.ponce@tam.gob.mx";//any335@hotmail.com
+                        mail = "rcarlosmorris@gmail.com";
+                        dependencia = "Servicios públicos";
                         break;
                     case "Cuadrilla ecológica":
-                        mail = "gildardo.ponce@tam.gob.mx";//direccionecologia@ciudadmadero.gob.mx
+                        mail = "direccionecologia@ciudadmadero.gob.mx";
+                        dependencia = "Ecología";
                         break;
                     case "Obras públicas":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "direcciongeneralobraspublicas@ciudadmadero.gob.mx";
+                        dependencia = "Obras públicas";
                         break;
                     case "Vialidad":
-                        mail = "gildardo.ponce@tam.gob.mx";
+                        mail = "direcciontransito@ciudadmadero.gob.mx";
+                        dependencia = "Tránsito";
                         break;
                     case "Transporte público":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "transporte.zonaconurbada@tam.gob.mx";
+                        dependencia = "Transporte público";
                         break;
                     case "Protección civil":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "proteccioncivilmadero.bomberos@gmail.com";
+                        dependencia = "Protección Civil";
                         break;
                 }
                 break;
@@ -440,29 +442,32 @@ public class NuevoReporteActivity extends Fragment {
             case "Altamira":
                 switch (datos[1]) {
                     case "COMAPA":
-                        mail = "gildardo.ponce@tam.gob.mx";//monje@comapaaltamira.gob.mx
+                        mail = "serviciospublicosalt2016@gmail.com";
+                        dependencia = "COMAPA";
                         break;
                     case "Servicios públicos":
-                        mail = "gildardo.ponce@tam.gob.mx";//secretariasp.altamira@gmail.com
+                        mail = "serviciospublicosalt2016@gmail.com";
+                        dependencia = "Servicios públicos";
                         break;
                     case "Cuadrilla ecológica":
-                        mail = "gildardo.ponce@tam.gob.mx";//illescasfrancisco@hotmail.com
+                        mail = "subdireccion.ecologia.altamira@hotmail.com";
+                        dependencia = "Ecología";
                         break;
                     case "Obras públicas":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "pathrrey@hotmail.com";
+                        dependencia = "Obras públicas";
                         break;
                     case "Vialidad":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
+                        mail = "transito@altamira.gob.mx";
+                        dependencia = "Tránsito";
                         break;
                     case "Transporte público":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "transporte.zonaconurbada@tam.gob.mx";
+                        dependencia = "Transporte público";
                         break;
                     case "Protección civil":
-                        mail = "gildardo.ponce@tam.gob.mx";//Vacio
-                        dependencia = "IMEPLAN";
-                        cargo = "Jefatura de Informática";
+                        mail = "proteccioncivil@altamira.gob.mx";
+                        dependencia = "Protección Civil";
                         break;
                 }
                 break;
@@ -471,10 +476,8 @@ public class NuevoReporteActivity extends Fragment {
                 return;
         }
 
-        //mail = "enoc.9714@gmail.com";
-
         String asunto = "Reporte ciudadano";
-        String mensaje = cargo + "\n" + dependencia + "\n";
+        String mensaje = dependencia + "\n";
         mensaje += "Por medio de la presente se notifica sobre el siguiente reporte ciudadano:\n";
         mensaje += "Categoría: " + datos[1] + "\nSubcategoría: " + datos[0] +
                 "\nCon ubicacion en: " + datos[5] + "\n" + datos[2] + "," + datos[3] +
