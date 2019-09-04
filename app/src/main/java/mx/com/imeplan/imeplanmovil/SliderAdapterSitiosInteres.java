@@ -1,7 +1,7 @@
 package mx.com.imeplan.imeplanmovil;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +52,7 @@ public class SliderAdapterSitiosInteres extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position){
-        layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.slide_sitios_interes_layout, container,false);
 
         ImageView slideImageView = (ImageView) view.findViewById(R.id.imageViewSlideSitiosInteres);

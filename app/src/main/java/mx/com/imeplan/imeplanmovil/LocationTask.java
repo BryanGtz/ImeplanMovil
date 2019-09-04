@@ -79,7 +79,8 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
             municipio = addresses.get(0).getLocality();
         }
         else{
-            Log.e("no entra","addresses null or addresses empty");
+            Log.e("doInBackground","addresses null or addresses empty");
+
         }
         return resultados;
     }
@@ -95,6 +96,21 @@ public class LocationTask extends AsyncTask<Void,Void,String[]> {
                     break;
                 case 2:
                     String address = "<b>Dirección: </b>"+result[0];
+                    tvLocation.setText(Html.fromHtml(address));
+                    break;
+                default:
+                    tvLocation.setText(result[0]);
+                    break;
+            }
+        }
+        else if(tvLocation!=null){
+            Log.e("sourceCode",sourceCode+"");
+            switch (sourceCode){
+                case 1:
+                    tvLocation.setText("Coordenadas obtenidas: ("+l.getLatitude()+","+l.getLongitude()+")");
+                    break;
+                case 2:
+                    String address = "<b>Dirección: </b>"+"("+l.getLatitude()+","+l.getLongitude()+")";
                     tvLocation.setText(Html.fromHtml(address));
                     break;
                 default:

@@ -1,36 +1,21 @@
 package mx.com.imeplan.imeplanmovil;
 
-import android.Manifest;
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import android.Manifest.permission;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -64,11 +49,14 @@ public class LocationHelper {
             isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
             isNetworkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         }
+        else{
+            Log.e("LocationManager", "null");
+        }
 
-        if (isGPSEnabled) {
-            locationProvider = LocationManager.GPS_PROVIDER;
-        } else if (isNetworkEnabled) {
+        if (isNetworkEnabled) {
             locationProvider = LocationManager.NETWORK_PROVIDER;
+        } else if (isGPSEnabled) {
+            locationProvider = LocationManager.GPS_PROVIDER;
         }
         //Revisar que se haya seleccionado un proveedor de ubicación
         if (locationProvider != null && !locationProvider.isEmpty()) {

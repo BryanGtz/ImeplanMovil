@@ -9,28 +9,21 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,18 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.xml.transform.sax.SAXResult;
 
 import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
@@ -149,7 +130,7 @@ public class NuevoReporteActivity extends Fragment {
         });
 
         //Obtener la ubicacion
-        lh = new LocationHelper(getContext(),250,1,campoLongitud);
+        //lh = new LocationHelper(getContext(),250,1,campoLongitud);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -518,7 +499,8 @@ public class NuevoReporteActivity extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        lh = new LocationHelper(getContext(),250,1,campoLongitud);
+        lh = new LocationHelper(getContext(),500,0,campoLongitud);
+        Log.e("LocationHelper","ejecutandose....");
     }
 
     @Override
@@ -531,8 +513,8 @@ public class NuevoReporteActivity extends Fragment {
     public void onDetach() {
         super.onDetach();
         Log.e("NRA","onDetach");
-        lh.lm.removeUpdates(lh.ll);
-        lh.lm = null;
+        //lh.lm.removeUpdates(lh.ll);
+        //lh.lm = null;
     }
 
     @Override

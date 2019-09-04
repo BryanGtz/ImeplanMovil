@@ -11,7 +11,7 @@ import mx.com.imeplan.imeplanmovil.utilidades.Utilidades;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME =  "bd_imeplanMovil.db";
 
 
@@ -27,6 +27,14 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
         db.execSQL(Utilidades.INSERTAR_CATEGORIAS);
         db.execSQL(Utilidades.INSERTAR_SUBCATEGORIAS);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table if exists "+Utilidades.TABLA_CATEGORIA);
+        db.execSQL("drop table if exists "+Utilidades.TABLA_SUBCATEGORIA);
+        db.execSQL("drop table if exists "+Utilidades.TABLA_REPORTE);
+        onCreate(db);
     }
 
     @Override
